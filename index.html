@@ -3,212 +3,967 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mizpah Foundations</title>
+  <title>Mizpah Foundations | Faith · Service · Community</title>
 
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
+      padding: 0;
+      box-sizing: border-box;
     }
 
+    :root {
+      --primary: #1e3a5f;
+      --primary-light: #2c5282;
+      --accent: #d4af37;
+      --accent-hover: #b8960c;
+      --text: #2d3748;
+      --text-light: #718096;
+      --bg: #f7fafc;
+      --white: #ffffff;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Navigation */
     header {
-      background: #0a2a66;
-      color: white;
-      padding: 15px;
+      background: var(--primary);
+      color: var(--white);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 22px;
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    nav button {
-      padding: 8px 15px;
-      border: none;
-      background: white;
-      color: #0a2a66;
-      cursor: pointer;
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
-      border-radius: 4px;
+      color: var(--primary);
+      font-size: 1.2rem;
     }
 
+    .logo-text h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      font-size: 0.75rem;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .auth-btn {
+      padding: 0.5rem 1.25rem;
+      border: 2px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .auth-btn:hover {
+      background: var(--accent);
+      color: var(--primary);
+    }
+
+    .auth-btn.logout {
+      border-color: #fc8181;
+      color: #fc8181;
+    }
+
+    .auth-btn.logout:hover {
+      background: #fc8181;
+      color: white;
+    }
+
+    /* Hero Section */
     .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: var(--white);
+      padding: 6rem 2rem;
       text-align: center;
-      padding: 60px 20px;
-      background: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
     }
 
     .hero h2 {
-      color: #0a2a66;
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.2;
     }
 
-    .content {
-      padding: 20px;
+    .hero .subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      font-weight: 300;
     }
 
-    .card {
-      background: white;
-      padding: 15px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
     }
 
-    footer {
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: var(--accent);
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 8px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    /* About Section */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section-header {
       text-align: center;
-      padding: 15px;
-      background: #0a2a66;
-      color: white;
-      margin-top: 30px;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h3 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header h3::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .section-header p {
+      color: var(--text-light);
+      margin-top: 1.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Intro Cards */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .intro-card {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border-top: 4px solid var(--accent);
+    }
+
+    .intro-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .intro-card h4 {
+      color: var(--primary);
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .intro-card p {
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* Mission & Vision */
+    .mission-section {
+      background: var(--white);
+      padding: 4rem 2rem;
+      margin: 2rem 0;
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .mission-content h3 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .mission-list {
+      list-style: none;
+      margin-top: 1.5rem;
+    }
+
+    .mission-list li {
+      padding: 0.75rem 0;
+      padding-left: 2rem;
+      position: relative;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .mission-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .mission-visual {
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+      height: 400px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 1.5rem;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-visual::before {
+      content: 'Mizpah';
+      position: absolute;
+      font-size: 8rem;
+      opacity: 0.1;
+      font-weight: bold;
+    }
+
+    /* Programs Section */
+    .programs-section {
+      background: var(--bg);
+    }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .program-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
+
+    .program-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .program-header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .program-header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: var(--white);
+      border-radius: 50% 50% 0 0;
+    }
+
+    .program-header h4 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .program-header .icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .program-body {
+      padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .program-body ul {
+      list-style: none;
+    }
+
+    .program-body li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+
+    .program-body li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* Impact Stats */
+    .stats-section {
+      background: var(--primary);
+      color: var(--white);
+      padding: 4rem 2rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .stat-item h4 {
+      font-size: 3rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-item p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* News Section */
+    .news-section {
+      background: var(--white);
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .news-card {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--accent);
+      transition: transform 0.3s;
+    }
+
+    .news-card:hover {
+      transform: translateX(5px);
+    }
+
+    .news-date {
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .news-title {
+      color: var(--primary);
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .news-excerpt {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Values */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .value-item {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .value-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .value-item h4 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .value-item p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      background: #0f172a;
+      color: var(--white);
+      padding: 3rem 2rem 1rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h4 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .footer-section p, .footer-section a {
+      color: #94a3b8;
+      text-decoration: none;
+      line-height: 1.8;
+      font-size: 0.9rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid #334155;
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero h2 {
+        font-size: 2rem;
+      }
+      
+      .mission-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .mission-visual {
+        height: 300px;
+      }
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-light);
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Mizpah Foundations</h1>
-
-  <nav>
-    <button onclick="login()" id="loginBtn">Login</button>
-    <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
-  </nav>
+  <div class="nav-container">
+    <div class="logo">
+      <div class="logo-icon">M</div>
+      <div class="logo-text">
+        <h1>Mizpah Foundations</h1>
+        <span>Est. 2015 · Kerala, India</span>
+      </div>
+    </div>
+    
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#mission">Mission</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#impact">Impact</a></li>
+        <li><a href="#news">News</a></li>
+      </ul>
+      <button class="auth-btn" onclick="login()" id="loginBtn">Login</button>
+      <button class="auth-btn logout" onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
+    </nav>
+  </div>
 </header>
 
 <section class="hero">
-  <h2>Welcome to Mizpah Foundations</h2>
-  <p>Providing leadership, theology, and ministry excellence.</p>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span>✝</span>
+      <span>Christian NGO · Registered 2015</span>
+    </div>
+    <h2>Faith · Service · Community</h2>
+    <p class="subtitle">A beacon of hope in Kodangavila, Neyyattinkara, serving spiritual and social needs across Kerala and India through ministry, training, and compassionate outreach.</p>
+    <a href="#about" class="cta-button">Discover Our Work</a>
+  </div>
 </section>
 
-<section class="content">
-
-  <h3>News & Events</h3>
-
-  <div id="newsContainer">
-    <div class="card">Loading news...</div>
+<section id="about" class="section">
+  <div class="section-header">
+    <h3>About Mizpah</h3>
+    <p>The name "Mizpah" carries biblical significance — a symbol of covenant, watchfulness, unity and love — reflecting our values of fellowship, service, and outreach.</p>
   </div>
+  
+  <div class="intro-grid">
+    <div class="intro-card">
+      <h4>📍 Our Roots</h4>
+      <p>Based in Kodangavila, Neyyattinkara, Thiruvananthapuram (Kerala, India), established in 2015 as a registered non-governmental organisation serving both spiritual and social needs.</p>
+    </div>
+    <div class="intro-card">
+      <h4>🤝 Our Approach</h4>
+      <p>We function as a faith-based NGO dedicated to the benefit of people through ministry, training, charity and community service — believing in holistic transformation.</p>
+    </div>
+    <div class="intro-card">
+      <h4>🌟 Our Calling</h4>
+      <p>Where spiritual growth and social upliftment go hand in hand, creating sustainable impact through compassionate service and ethical leadership.</p>
+    </div>
+  </div>
+</section>
 
+<section id="mission" class="mission-section">
+  <div class="mission-grid">
+    <div class="mission-content">
+      <h3>Mission & Vision</h3>
+      <p>Our core mission drives every initiative we undertake, guided by unwavering faith and commitment to community transformation.</p>
+      <ul class="mission-list">
+        <li>Spread the Gospel of Jesus Christ, locally and across India</li>
+        <li>Train and ordain men and women for Christian ministry, pastoral work, and community leadership</li>
+        <li>Support churches, fellowships and mission partners working across denominations</li>
+        <li>Serve the poor, marginalized, and vulnerable with compassionate social outreach</li>
+      </ul>
+    </div>
+    <div class="mission-visual">
+      <div>
+        <div style="font-size: 4rem; margin-bottom: 1rem;">⛪</div>
+        <p>"Mizpah: The Lord watch between me and thee, when we are absent one from another"</p>
+        <small style="opacity: 0.7; margin-top: 1rem; display: block;">Genesis 31:49</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="programs" class="section programs-section">
+  <div class="section-header">
+    <h3>Our Programs</h3>
+    <p>Comprehensive initiatives spanning spiritual nourishment, leadership development, and community welfare</p>
+  </div>
+  
+  <div class="programs-grid">
+    <div class="program-card">
+      <div class="program-header">
+        <div class="icon">⛪</div>
+        <h4>Church & Fellowship Network</h4>
+        <p>Spiritual Community Building</p>
+      </div>
+      <div class="program-body">
+        <ul>
+          <li>Church congregations across southern Kerala and Indian states</li>
+          <li>Inter-church partnerships for worship and discipleship</li>
+          <li>Outreach teams for evangelism and Bible teaching</li>
+          <li>Community belonging and practical support for believers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="program-card">
+      <div class="program-header">
+        <div class="icon">🎓</div>
+        <h4>Training & Ordination</h4>
+        <p>Leadership Development Since 2015</p>
+      </div>
+      <div class="program-body">
+        <ul>
+          <li>Leadership classes and pastoral care training</li>
+          <li>Evangelism workshops and ministry preparation</li>
+          <li>Mizpah University: Theological education initiative</li>
+          <li>Courses in theology, biblical studies, and counselling</li>
+          <li>Equipping graduates for church planting and youth ministry</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="program-card">
+      <div class="program-header">
+        <div class="icon">❤️</div>
+        <h4>Charity & Social Impact</h4>
+        <p>Compassionate Community Service</p>
+      </div>
+      <div class="program-body">
+        <ul>
+          <li><strong>Relief:</strong> Food distribution, elderly care, disaster response</li>
+          <li><strong>Healthcare:</strong> Medical camps, wellness education</li>
+          <li><strong>Education:</strong> Scholarships, vocational guidance, learning resources</li>
+          <li><strong>Empowerment:</strong> Skills training (sewing, computing), life skills seminars</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <h3>Core Values</h3>
+    <p>Principles that guide our Christian ethos and operational integrity</p>
+  </div>
+  
+  <div class="values-grid">
+    <div class="value-item">
+      <div class="value-icon">📖</div>
+      <h4>Faithfulness</h4>
+      <p>In proclamation of the Gospel</p>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">🤲</div>
+      <h4>Compassion</h4>
+      <p>In service to all, regardless of background</p>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">⚖️</div>
+      <h4>Integrity</h4>
+      <p>And ethical leadership in every ministry</p>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">🤝</div>
+      <h4>Partnership</h4>
+      <p>To foster sustainable community impact</p>
+    </div>
+    <div class="value-item">
+      <div class="value-icon">💪</div>
+      <h4>Empowerment</h4>
+      <p>Equipping individuals for effective service</p>
+    </div>
+  </div>
+</section>
+
+<section id="impact" class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <h4>Since 2015</h4>
+      <p>Years of Service</p>
+    </div>
+    <div class="stat-item">
+      <h4>100+</h4>
+      <p>Ministers Trained</p>
+    </div>
+    <div class="stat-item">
+      <h4>Multiple</h4>
+      <p>Church Plants</p>
+    </div>
+    <div class="stat-item">
+      <h4>Countless</h4>
+      <p>Lives Impacted</p>
+    </div>
+  </div>
+</section>
+
+<section id="news" class="section news-section">
+  <div class="section-header">
+    <h3>News & Events</h3>
+    <p>Stay updated with our latest initiatives and community activities</p>
+  </div>
+  
+  <div id="newsContainer" class="news-grid">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading latest updates...</p>
+    </div>
+  </div>
 </section>
 
 <footer>
-  © 2026 Mizpah Foundations. All rights reserved.
+  <div class="footer-content">
+    <div class="footer-section">
+      <h4>Mizpah Foundations</h4>
+      <p>A Christian NGO registered in 2015, serving Kodangavila, Neyyattinkara, Thiruvananthapuram, Kerala, India.</p>
+      <p style="margin-top: 1rem; font-style: italic; color: var(--accent);">"The Lord watch between me and thee"</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <p><a href="#about">About Us</a></p>
+      <p><a href="#mission">Our Mission</a></p>
+      <p><a href="#programs">Programs</a></p>
+      <p><a href="#news">News & Events</a></p>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Kodangavila, Neyyattinkara<br>Thiruvananthapuram, Kerala<br>India</p>
+      <p style="margin-top: 1rem;">Working across southern Kerala and Indian states</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Mizpah Foundations. All rights reserved. | Registered Christian NGO</p>
+  </div>
 </footer>
 
-
-<!-- Firebase SDK (LOAD ONLY ONCE) -->
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
-
-
-<!-- Your Firebase config -->
+<!-- Firebase Config -->
 <script src="/js/firebase-config.js"></script>
 
 <script>
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
 
-// LOGIN BUTTON
+// Auth functions
 function login() {
   window.location.href = "login.html";
 }
 
-// LOGOUT BUTTON
 function logout() {
-  auth.signOut();
+  auth.signOut().then(() => {
+    console.log("User signed out");
+  }).catch((error) => {
+    console.error("Sign out error:", error);
+  });
 }
 
-
-// AUTH STATE
+// Auth state listener
 auth.onAuthStateChanged(user => {
-
-  if(user){
-
-    document.getElementById("loginBtn").style.display = "none";
-    document.getElementById("logoutBtn").style.display = "inline-block";
-
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  
+  if (user) {
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-block";
     console.log("Logged in:", user.email);
-
+  } else {
+    loginBtn.style.display = "inline-block";
+    logoutBtn.style.display = "none";
   }
-  else{
-
-    document.getElementById("loginBtn").style.display = "inline-block";
-    document.getElementById("logoutBtn").style.display = "none";
-
-  }
-
 });
 
-
-
-// LOAD NEWS FROM FIRESTORE
-function loadNews(){
-
-const container = document.getElementById("newsContainer");
-
-db.collection("news")
-.orderBy("date","desc")
-.onSnapshot(snapshot => {
-
-container.innerHTML="";
-
-if(snapshot.empty){
-
-container.innerHTML =
-`<div class="card">No news published yet</div>`;
-
-return;
-
+// Load news from Firestore
+function loadNews() {
+  const container = document.getElementById("newsContainer");
+  
+  db.collection("news")
+    .orderBy("date", "desc")
+    .limit(6)
+    .onSnapshot(snapshot => {
+      container.innerHTML = "";
+      
+      if (snapshot.empty) {
+        container.innerHTML = `
+          <div class="news-card" style="grid-column: 1/-1; text-align: center;">
+            <p style="color: var(--text-light);">No news published yet. Check back soon for updates!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      snapshot.forEach(doc => {
+        const news = doc.data();
+        const date = news.date ? news.date.toDate().toLocaleDateString('en-IN', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }) : "Just now";
+        
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.innerHTML = `
+          <div class="news-date">${date}</div>
+          <div class="news-title">${news.title || 'Untitled'}</div>
+          <div class="news-excerpt">${news.content || 'No content available'}</div>
+        `;
+        container.appendChild(card);
+      });
+    }, (error) => {
+      console.error("Error loading news:", error);
+      container.innerHTML = `
+        <div class="news-card" style="grid-column: 1/-1; text-align: center; border-left-color: #fc8181;">
+          <p style="color: #e53e3e;">Unable to load news updates. Please try again later.</p>
+        </div>
+      `;
+    });
 }
 
-snapshot.forEach(doc => {
-
-const news = doc.data();
-
-const date =
-news.date ?
-news.date.toDate().toLocaleString()
-: "Just now";
-
-container.innerHTML +=
-`
-<div class="card">
-
-<h4>${news.title}</h4>
-
-<p>${news.content}</p>
-
-<small>${date}</small>
-
-</div>
-`;
-
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  loadNews();
 });
-
-},
-(error)=>{
-
-console.error(error);
-
-container.innerHTML =
-`<div class="card">Error loading news</div>`;
-
-});
-
-}
-
-
-// RUN NEWS LOAD
-loadNews();
-
 </script>
-
 
 </body>
 </html>
