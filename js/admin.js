@@ -34,32 +34,38 @@ loadNews();
 // ADD NEWS
 function addNews(){
 
-const title = document.getElementById("title").value;
-const content = document.getElementById("content").value;
+const title = document.getElementById("title").value.trim();
+const content = document.getElementById("content").value.trim();
 
-if(title==="" || content===""){
-
-alert("Enter title and content");
+if(title === "" || content === ""){
+alert("Please enter title and content");
 return;
-
 }
 
 db.collection("news").add({
 
-title:title,
-content:content,
-date:new Date()
+title: title,
+content: content,
+date: firebase.firestore.FieldValue.serverTimestamp()
 
 })
-.then(()=>{
+.then((docRef)=>{
 
-alert("News published");
+alert("✅ News published successfully");
+
+console.log("News ID:", docRef.id);
 
 document.getElementById("title").value="";
 document.getElementById("content").value="";
 
 })
-.catch(e=>alert(e.message));
+.catch((error)=>{
+
+console.error("Error:", error);
+
+alert("❌ Failed: " + error.message);
+
+});
 
 }
 

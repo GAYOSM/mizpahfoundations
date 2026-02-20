@@ -145,53 +145,56 @@ auth.onAuthStateChanged(user => {
 // LOAD NEWS FROM FIRESTORE
 function loadNews(){
 
-  const container = document.getElementById("newsContainer");
+const container = document.getElementById("newsContainer");
 
-  db.collection("news")
-    .orderBy("date","desc")
-    .get()
-    .then(snapshot => {
+db.collection("news")
+.orderBy("date","desc")
+.onSnapshot(snapshot => {
 
-      container.innerHTML = "";
+container.innerHTML="";
 
-      if(snapshot.empty){
+if(snapshot.empty){
 
-        container.innerHTML =
-        `<div class="card">No news available</div>`;
+container.innerHTML =
+`<div class="card">No news published yet</div>`;
 
-        return;
+return;
 
-      }
+}
 
-      snapshot.forEach(doc => {
+snapshot.forEach(doc => {
 
-        const news = doc.data();
+const news = doc.data();
 
-        const date =
-          news.date ?
-          news.date.toDate().toLocaleString()
-          : "";
+const date =
+news.date ?
+news.date.toDate().toLocaleString()
+: "Just now";
 
-        container.innerHTML +=
-        `
-        <div class="card">
-          <h4>${news.title || ""}</h4>
-          <p>${news.content || ""}</p>
-          <small>${date}</small>
-        </div>
-        `;
+container.innerHTML +=
+`
+<div class="card">
 
-      });
+<h4>${news.title}</h4>
 
-    })
-    .catch(error => {
+<p>${news.content}</p>
 
-      console.error(error);
+<small>${date}</small>
 
-      container.innerHTML =
-      `<div class="card">Error loading news</div>`;
+</div>
+`;
 
-    });
+});
+
+},
+(error)=>{
+
+console.error(error);
+
+container.innerHTML =
+`<div class="card">Error loading news</div>`;
+
+});
 
 }
 
