@@ -124,7 +124,7 @@ header {
 
 /* Layout */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
 }
@@ -132,7 +132,7 @@ header {
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
 }
@@ -171,6 +171,7 @@ header {
 .stat-icon.blue { background: #dbeafe; color: var(--primary); }
 .stat-icon.green { background: #d1fae5; color: var(--success); }
 .stat-icon.orange { background: #ffedd5; color: var(--warning); }
+.stat-icon.purple { background: #e9d5ff; color: #9333ea; }
 
 .stat-label {
     font-size: 0.875rem;
@@ -190,14 +191,8 @@ header {
 /* Main Grid */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
-}
-
-@media (max-width: 968px) {
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* Cards */
@@ -215,6 +210,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .card-title {
@@ -230,6 +227,38 @@ header {
     padding: 1.5rem;
 }
 
+/* Search and Filter */
+.search-filter {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-input {
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    width: 280px;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filter-select {
+    padding: 0.625rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    background: white;
+    cursor: pointer;
+}
+
 /* Form Styles */
 .form-group {
     margin-bottom: 1.25rem;
@@ -243,7 +272,7 @@ header {
     margin-bottom: 0.5rem;
 }
 
-.form-input, .form-textarea {
+.form-input, .form-textarea, .form-select {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid var(--border);
@@ -254,27 +283,66 @@ header {
     background: var(--surface);
 }
 
-.form-input:focus, .form-textarea:focus {
+.form-input:focus, .form-textarea:focus, .form-select:focus {
     outline: none;
     border-color: var(--primary-light);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.form-textarea {
-    resize: vertical;
-    min-height: 120px;
+.image-upload {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-upload:hover {
+    border-color: var(--primary-light);
+    background: #f8fafc;
+}
+
+.image-upload.has-image {
+    border-style: solid;
+    border-color: var(--success);
+    padding: 0;
+}
+
+.image-preview {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+.upload-placeholder {
+    color: var(--text-secondary);
+}
+
+.upload-placeholder i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
 }
 
 .form-footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
     margin-top: 1.5rem;
-}
-
-.char-count {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
 }
 
 .btn-primary {
@@ -308,71 +376,100 @@ header {
     transform: none;
 }
 
-/* News List */
-.news-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.btn-secondary {
+    background: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.news-item {
+.btn-secondary:hover {
+    background: var(--border);
+}
+
+/* Students Grid */
+.students-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.student-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
     transition: all 0.2s;
-    position: relative;
+    cursor: pointer;
 }
 
-.news-item:hover {
+.student-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
     border-color: var(--primary-light);
-    box-shadow: var(--shadow);
-    transform: translateX(4px);
 }
 
-.news-meta {
+.student-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%);
+}
+
+.student-info {
+    padding: 1.25rem;
+}
+
+.student-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.student-meta {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    flex-direction: column;
+    gap: 0.375rem;
     font-size: 0.875rem;
     color: var(--text-secondary);
 }
 
-.news-badge {
-    background: #dbeafe;
-    color: var(--primary);
+.student-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.position-badge {
+    display: inline-flex;
+    align-items: center;
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
+    margin-top: 0.75rem;
+    width: fit-content;
 }
 
-.news-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-    line-height: 1.4;
-}
+.position-badge.leader { background: #dbeafe; color: var(--primary); }
+.position-badge.member { background: #d1fae5; color: var(--success); }
+.position-badge.volunteer { background: #ffedd5; color: var(--warning); }
+.position-badge.coordinator { background: #e9d5ff; color: #9333ea; }
 
-.news-content {
-    color: var(--text-secondary);
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.news-actions {
+.student-actions {
     display: flex;
-    gap: 0.75rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
+    gap: 0.5rem;
+    padding: 0 1.25rem 1.25rem;
 }
 
 .btn-icon {
@@ -386,6 +483,8 @@ header {
     align-items: center;
     gap: 0.5rem;
     border: none;
+    flex: 1;
+    justify-content: center;
 }
 
 .btn-edit {
@@ -409,21 +508,192 @@ header {
 /* Empty State */
 .empty-state {
     text-align: center;
-    padding: 3rem 1.5rem;
+    padding: 4rem 1.5rem;
     color: var(--text-secondary);
+    grid-column: 1 / -1;
 }
 
 .empty-state i {
-    font-size: 3rem;
+    font-size: 4rem;
     margin-bottom: 1rem;
     opacity: 0.3;
 }
 
 .empty-state h4 {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95);
+    transition: transform 0.3s;
+}
+
+.modal-overlay.active .modal {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    transition: all 0.2s;
+}
+
+.modal-close:hover {
+    background: var(--background);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Student Detail Page */
+.student-detail {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.detail-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 2rem;
+    position: relative;
+}
+
+.detail-back {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.detail-back:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.detail-profile {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.detail-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255,255,255,0.3);
+    background: white;
+}
+
+.detail-info h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.detail-info p {
+    opacity: 0.9;
+    font-size: 1.125rem;
+}
+
+.detail-body {
+    padding: 2rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.detail-item {
+    background: var(--background);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+}
+
+.detail-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.detail-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 /* Toast Notification */
@@ -441,7 +711,7 @@ header {
     gap: 0.75rem;
     transform: translateX(400px);
     transition: transform 0.3s ease;
-    z-index: 1000;
+    z-index: 1001;
 }
 
 .toast.show {
@@ -497,7 +767,7 @@ header {
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .container {
         padding: 1rem;
     }
@@ -513,6 +783,25 @@ header {
     .user-info {
         display: none;
     }
+    
+    .search-input {
+        width: 100%;
+    }
+    
+    .detail-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .detail-back {
+        position: static;
+        margin-bottom: 1rem;
+        width: fit-content;
+    }
+}
+
+.hidden {
+    display: none !important;
 }
 </style>
 </head>
@@ -536,91 +825,157 @@ header {
 </header>
 
 <div class="container">
-    <!-- Stats Overview -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-header">
-                <div>
-                    <div class="stat-label">Total Articles</div>
-                    <div class="stat-value" id="totalNews">0</div>
-                </div>
-                <div class="stat-icon blue">
-                    <i class="fas fa-newspaper"></i>
-                </div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-header">
-                <div>
-                    <div class="stat-label">Published Today</div>
-                    <div class="stat-value" id="todayNews">0</div>
-                </div>
-                <div class="stat-icon green">
-                    <i class="fas fa-calendar-check"></i>
+    <!-- Dashboard View -->
+    <div id="dashboardView">
+        <!-- Stats Overview -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-label">Total Students</div>
+                        <div class="stat-value" id="totalStudents">0</div>
+                    </div>
+                    <div class="stat-icon blue">
+                        <i class="fas fa-users"></i>
+                    </div>
                 </div>
             </div>
+            <!-- Position stats will be added dynamically -->
         </div>
-        <div class="stat-card">
-            <div class="stat-header">
-                <div>
-                    <div class="stat-label">Last Activity</div>
-                    <div class="stat-value" style="font-size: 0.875rem;" id="lastActivity">-</div>
+
+        <!-- Students Management -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-user-graduate" style="color: var(--primary);"></i>
+                    Student Management
+                </h3>
+                <div class="search-filter">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search by name or register no..." oninput="filterStudents()">
+                    <select class="filter-select" id="positionFilter" onchange="filterStudents()">
+                        <option value="">All Positions</option>
+                        <option value="Leader">Leader</option>
+                        <option value="Member">Member</option>
+                        <option value="Volunteer">Volunteer</option>
+                        <option value="Coordinator">Coordinator</option>
+                    </select>
+                    <button class="btn-primary" onclick="openAddModal()">
+                        <i class="fas fa-plus"></i>
+                        Add Student
+                    </button>
                 </div>
-                <div class="stat-icon orange">
-                    <i class="fas fa-clock"></i>
+            </div>
+            <div class="card-body">
+                <div id="studentsGrid" class="students-grid">
+                    <!-- Students will be loaded here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="dashboard-grid">
-        <!-- Publish Form -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-pen-nib" style="color: var(--primary);"></i>
-                    Publish News
-                </h3>
-            </div>
-            <div class="card-body">
-                <form id="newsForm" onsubmit="event.preventDefault(); addNews();">
-                    <div class="form-group">
-                        <label class="form-label">Article Title</label>
-                        <input type="text" id="title" class="form-input" placeholder="Enter compelling headline..." required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Content</label>
-                        <textarea id="content" class="form-textarea" placeholder="Write your news content here..." required></textarea>
-                    </div>
-                    
-                    <div class="form-footer">
-                        <span class="char-count" id="charCount">0 characters</span>
-                        <button type="submit" class="btn-primary" id="publishBtn">
-                            <i class="fas fa-paper-plane"></i>
-                            Publish Article
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- News List -->
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-list-ul" style="color: var(--primary);"></i>
-                    Recent Publications
-                </h3>
-                <button class="btn-icon btn-edit" onclick="loadNews()" style="padding: 0.5rem;">
-                    <i class="fas fa-sync-alt"></i>
+    <!-- Student Detail View (Template-based) -->
+    <div id="studentDetailView" class="hidden">
+        <div class="student-detail">
+            <div class="detail-header">
+                <button class="detail-back" onclick="showDashboard()">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
                 </button>
-            </div>
-            <div class="card-body" style="padding: 0;">
-                <div id="newsList" class="news-list" style="padding: 1.5rem;">
-                    <!-- News items will be loaded here -->
+                <div class="detail-profile">
+                    <img id="detailImage" src="" alt="Student" class="detail-image">
+                    <div class="detail-info">
+                        <h2 id="detailName">Student Name</h2>
+                        <p id="detailPosition">Position</p>
+                    </div>
                 </div>
             </div>
+            <div class="detail-body">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Register Number</div>
+                        <div class="detail-value" id="detailRegNo">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Position</div>
+                        <div class="detail-value" id="detailPositionBadge">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Date Added</div>
+                        <div class="detail-value" id="detailDate">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value" style="color: var(--success);">
+                            <i class="fas fa-check-circle"></i> Active
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button class="btn-secondary" onclick="showDashboard()">Close</button>
+                    <button class="btn-primary" onclick="editCurrentStudent()">
+                        <i class="fas fa-edit"></i>
+                        Edit Student
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Student Modal -->
+<div id="studentModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">Add New Student</h3>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="studentForm" onsubmit="event.preventDefault(); saveStudent();">
+                <input type="hidden" id="studentId">
+                
+                <div class="form-group">
+                    <label class="form-label">Student Name *</label>
+                    <input type="text" id="studentName" class="form-input" placeholder="Enter full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Register Number *</label>
+                    <input type="text" id="studentRegNo" class="form-input" placeholder="Enter register number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Position *</label>
+                    <select id="studentPosition" class="form-select" required>
+                        <option value="">Select Position</option>
+                        <option value="Leader">Leader</option>
+                        <option value="Member">Member</option>
+                        <option value="Volunteer">Volunteer</option>
+                        <option value="Coordinator">Coordinator</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Student Photo</label>
+                    <div class="image-upload" id="imageUpload" onclick="document.getElementById('studentImage').click()">
+                        <input type="file" id="studentImage" class="file-input" accept="image/*" onchange="previewImage(event)">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <div>Click to upload photo</div>
+                            <small style="color: var(--text-secondary);">or drag and drop</small>
+                        </div>
+                        <img id="imagePreview" class="image-preview hidden" alt="Preview">
+                    </div>
+                </div>
+                
+                <div class="form-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary" id="saveBtn">
+                        <i class="fas fa-save"></i>
+                        Save Student
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -640,11 +995,14 @@ header {
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script src="/js/firebase-config.js"></script>
-<script src="../js/admin.js"></script>
 
 <script>
 const auth = firebase.auth();
 const db = firebase.firestore();
+const storage = firebase.storage();
+
+let currentStudents = [];
+let currentStudentId = null;
 
 // Protect dashboard
 auth.onAuthStateChanged(user => {
@@ -660,14 +1018,8 @@ auth.onAuthStateChanged(user => {
         }, 2000);
     } else {
         document.getElementById('userEmail').textContent = user.email;
-        loadNews();
+        loadStudents();
     }
-});
-
-// Character counter
-document.getElementById('content').addEventListener('input', function() {
-    const count = this.value.length;
-    document.getElementById('charCount').textContent = `${count} characters`;
 });
 
 // Toast notification
@@ -703,105 +1055,300 @@ function logout() {
     });
 }
 
-// Add News
-function addNews() {
-    const title = document.getElementById("title").value.trim();
-    const content = document.getElementById("content").value.trim();
-    const btn = document.getElementById("publishBtn");
+// Load Students
+function loadStudents() {
+    const grid = document.getElementById('studentsGrid');
     
-    if(title === "" || content === "") {
-        showToast('Error', 'Please fill in all fields', 'error');
-        return;
-    }
+    // Show loading skeleton
+    grid.innerHTML = `
+        <div class="skeleton" style="height: 300px;"></div>
+        <div class="skeleton" style="height: 300px;"></div>
+        <div class="skeleton" style="height: 300px;"></div>
+    `;
     
-    // Loading state
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Publishing...';
-    
-    db.collection("news").add({
-        title: title,
-        content: content,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        author: auth.currentUser.email
-    })
-    .then(() => {
-        showToast('Published!', 'Your article has been published successfully');
-        document.getElementById("title").value = "";
-        document.getElementById("content").value = "";
-        document.getElementById("charCount").textContent = "0 characters";
-        loadNews();
-    })
-    .catch(error => {
-        showToast('Error', error.message, 'error');
-    })
-    .finally(() => {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Publish Article';
+    db.collection("students")
+    .orderBy("createdAt", "desc")
+    .onSnapshot(snapshot => {
+        currentStudents = [];
+        snapshot.forEach(doc => {
+            currentStudents.push({ id: doc.id, ...doc.data() });
+        });
+        
+        renderStudents(currentStudents);
+        updateStats(currentStudents);
     });
 }
 
-// Load News
-function loadNews() {
-    const newsList = document.getElementById("newsList");
+// Render Students Grid
+function renderStudents(students) {
+    const grid = document.getElementById('studentsGrid');
     
-    // Show loading skeleton
-    newsList.innerHTML = `
-        <div class="skeleton" style="height: 120px; margin-bottom: 1rem;"></div>
-        <div class="skeleton" style="height: 120px; margin-bottom: 1rem;"></div>
-        <div class="skeleton" style="height: 120px;"></div>
-    `;
+    if(students.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-user-graduate"></i>
+                <h4>No students found</h4>
+                <p>Add your first student to get started</p>
+            </div>
+        `;
+        return;
+    }
     
-    db.collection("news")
-    .orderBy("createdAt", "desc")
-    .onSnapshot(snapshot => {
-        newsList.innerHTML = "";
-        
-        if(snapshot.empty) {
-            newsList.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <h4>No articles yet</h4>
-                    <p>Start by publishing your first news article</p>
+    grid.innerHTML = students.map(student => `
+        <div class="student-card" onclick="viewStudent('${student.id}')">
+            <img src="${student.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${student.name}" class="student-image">
+            <div class="student-info">
+                <h4 class="student-name">${escapeHtml(student.name)}</h4>
+                <div class="student-meta">
+                    <span><i class="fas fa-id-card"></i> ${escapeHtml(student.regNo)}</span>
                 </div>
-            `;
-            updateStats(0);
-            return;
+                <span class="position-badge ${student.position.toLowerCase()}">${student.position}</span>
+            </div>
+            <div class="student-actions" onclick="event.stopPropagation()">
+                <button class="btn-icon btn-edit" onclick="openEditModal('${student.id}')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn-icon btn-delete" onclick="deleteStudent('${student.id}')">
+                    <i class="fas fa-trash-alt"></i> Delete
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Update Statistics
+function updateStats(students) {
+    const total = students.length;
+    document.getElementById('totalStudents').textContent = total;
+    
+    // Count by position
+    const positionCounts = {};
+    students.forEach(s => {
+        positionCounts[s.position] = (positionCounts[s.position] || 0) + 1;
+    });
+    
+    // Render position stats
+    const statsGrid = document.getElementById('statsGrid');
+    // Keep first card (total), remove others
+    while(statsGrid.children.length > 1) {
+        statsGrid.removeChild(statsGrid.lastChild);
+    }
+    
+    const positionColors = {
+        'Leader': 'blue',
+        'Member': 'green',
+        'Volunteer': 'orange',
+        'Coordinator': 'purple'
+    };
+    
+    const positionIcons = {
+        'Leader': 'fa-crown',
+        'Member': 'fa-user',
+        'Volunteer': 'fa-hands-helping',
+        'Coordinator': 'fa-tasks'
+    };
+    
+    Object.entries(positionCounts).forEach(([position, count]) => {
+        const card = document.createElement('div');
+        card.className = 'stat-card';
+        card.innerHTML = `
+            <div class="stat-header">
+                <div>
+                    <div class="stat-label">${position}s</div>
+                    <div class="stat-value">${count}</div>
+                </div>
+                <div class="stat-icon ${positionColors[position] || 'blue'}">
+                    <i class="fas ${positionIcons[position] || 'fa-user'}"></i>
+                </div>
+            </div>
+        `;
+        statsGrid.appendChild(card);
+    });
+}
+
+// Filter Students
+function filterStudents() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const positionFilter = document.getElementById('positionFilter').value;
+    
+    const filtered = currentStudents.filter(student => {
+        const matchesSearch = student.name.toLowerCase().includes(searchTerm) || 
+                             student.regNo.toLowerCase().includes(searchTerm);
+        const matchesPosition = !positionFilter || student.position === positionFilter;
+        return matchesSearch && matchesPosition;
+    });
+    
+    renderStudents(filtered);
+}
+
+// View Student Detail (Template-based)
+function viewStudent(id) {
+    const student = currentStudents.find(s => s.id === id);
+    if(!student) return;
+    
+    currentStudentId = id;
+    
+    document.getElementById('detailImage').src = student.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+    document.getElementById('detailName').textContent = student.name;
+    document.getElementById('detailPosition').textContent = student.position;
+    document.getElementById('detailRegNo').textContent = student.regNo;
+    document.getElementById('detailPositionBadge').textContent = student.position;
+    document.getElementById('detailDate').textContent = student.createdAt ? 
+        student.createdAt.toDate().toLocaleDateString() : 'Unknown';
+    
+    document.getElementById('dashboardView').classList.add('hidden');
+    document.getElementById('studentDetailView').classList.remove('hidden');
+    window.scrollTo(0, 0);
+}
+
+// Show Dashboard
+function showDashboard() {
+    document.getElementById('studentDetailView').classList.add('hidden');
+    document.getElementById('dashboardView').classList.remove('hidden');
+    currentStudentId = null;
+}
+
+// Edit Current Student (from detail view)
+function editCurrentStudent() {
+    if(currentStudentId) {
+        openEditModal(currentStudentId);
+    }
+}
+
+// Modal Functions
+function openAddModal() {
+    document.getElementById('modalTitle').textContent = 'Add New Student';
+    document.getElementById('studentForm').reset();
+    document.getElementById('studentId').value = '';
+    document.getElementById('imagePreview').classList.add('hidden');
+    document.getElementById('uploadPlaceholder').classList.remove('hidden');
+    document.getElementById('imageUpload').classList.remove('has-image');
+    document.getElementById('studentModal').classList.add('active');
+}
+
+function openEditModal(id) {
+    const student = currentStudents.find(s => s.id === id);
+    if(!student) return;
+    
+    document.getElementById('modalTitle').textContent = 'Edit Student';
+    document.getElementById('studentId').value = id;
+    document.getElementById('studentName').value = student.name;
+    document.getElementById('studentRegNo').value = student.regNo;
+    document.getElementById('studentPosition').value = student.position;
+    
+    if(student.imageUrl) {
+        document.getElementById('imagePreview').src = student.imageUrl;
+        document.getElementById('imagePreview').classList.remove('hidden');
+        document.getElementById('uploadPlaceholder').classList.add('hidden');
+        document.getElementById('imageUpload').classList.add('has-image');
+    } else {
+        document.getElementById('imagePreview').classList.add('hidden');
+        document.getElementById('uploadPlaceholder').classList.remove('hidden');
+        document.getElementById('imageUpload').classList.remove('has-image');
+    }
+    
+    document.getElementById('studentModal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('studentModal').classList.remove('active');
+}
+
+// Image Preview
+function previewImage(event) {
+    const file = event.target.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('imagePreview').src = e.target.result;
+            document.getElementById('imagePreview').classList.remove('hidden');
+            document.getElementById('uploadPlaceholder').classList.add('hidden');
+            document.getElementById('imageUpload').classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Save Student
+async function saveStudent() {
+    const id = document.getElementById('studentId').value;
+    const name = document.getElementById('studentName').value.trim();
+    const regNo = document.getElementById('studentRegNo').value.trim();
+    const position = document.getElementById('studentPosition').value;
+    const imageFile = document.getElementById('studentImage').files[0];
+    const btn = document.getElementById('saveBtn');
+    
+    if(!name || !regNo || !position) {
+        showToast('Error', 'Please fill in all required fields', 'error');
+        return;
+    }
+    
+    // Check for duplicate regNo
+    const duplicate = currentStudents.find(s => s.regNo === regNo && s.id !== id);
+    if(duplicate) {
+        showToast('Error', 'Register number already exists', 'error');
+        return;
+    }
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Saving...';
+    
+    try {
+        let imageUrl = null;
+        
+        // Upload image if provided
+        if(imageFile) {
+            const storageRef = storage.ref(`students/${Date.now()}_${imageFile.name}`);
+            await storageRef.put(imageFile);
+            imageUrl = await storageRef.getDownloadURL();
         }
         
-        updateStats(snapshot.size);
+        const studentData = {
+            name: name,
+            regNo: regNo,
+            position: position,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
         
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            const date = data.createdAt ? data.createdAt.toDate().toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            }) : 'Just now';
-            
-            const timeAgo = data.createdAt ? getTimeAgo(data.createdAt.toDate()) : 'Just now';
-            
-            const newsItem = document.createElement('div');
-            newsItem.className = 'news-item';
-            newsItem.innerHTML = `
-                <div class="news-meta">
-                    <span class="news-badge">News</span>
-                    <span><i class="far fa-clock"></i> ${timeAgo}</span>
-                    <span><i class="far fa-calendar"></i> ${date}</span>
-                </div>
-                <h4 class="news-title">${escapeHtml(data.title)}</h4>
-                <p class="news-content">${escapeHtml(data.content)}</p>
-                <div class="news-actions">
-                    <button class="btn-icon btn-edit" onclick="editNews('${doc.id}')">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="btn-icon btn-delete" onclick="deleteNews('${doc.id}')">
-                        <i class="fas fa-trash-alt"></i> Delete
-                    </button>
-                </div>
-            `;
-            newsList.appendChild(newsItem);
+        if(imageUrl) {
+            studentData.imageUrl = imageUrl;
+        }
+        
+        if(id) {
+            // Update existing
+            const existing = currentStudents.find(s => s.id === id);
+            if(existing && !imageUrl && existing.imageUrl) {
+                studentData.imageUrl = existing.imageUrl;
+            }
+            await db.collection("students").doc(id).update(studentData);
+            showToast('Updated!', 'Student information updated successfully');
+        } else {
+            // Add new
+            studentData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            await db.collection("students").add(studentData);
+            showToast('Added!', 'New student added successfully');
+        }
+        
+        closeModal();
+    } catch(error) {
+        showToast('Error', error.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Save Student';
+    }
+}
+
+// Delete Student
+function deleteStudent(id) {
+    if(confirm("Are you sure you want to delete this student? This action cannot be undone.")) {
+        db.collection("students").doc(id).delete()
+        .then(() => {
+            showToast('Deleted', 'Student has been removed');
+        })
+        .catch(error => {
+            showToast('Error', error.message, 'error');
         });
-    });
+    }
 }
 
 // Helper functions
@@ -811,52 +1358,12 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-function getTimeAgo(date) {
-    const seconds = Math.floor((new Date() - date) / 1000);
-    let interval = seconds / 31536000;
-    if (interval > 1) return Math.floor(interval) + " years ago";
-    interval = seconds / 2592000;
-    if (interval > 1) return Math.floor(interval) + " months ago";
-    interval = seconds / 86400;
-    if (interval > 1) return Math.floor(interval) + " days ago";
-    interval = seconds / 3600;
-    if (interval > 1) return Math.floor(interval) + " hours ago";
-    interval = seconds / 60;
-    if (interval > 1) return Math.floor(interval) + " minutes ago";
-    return "Just now";
-}
-
-function updateStats(total) {
-    document.getElementById('totalNews').textContent = total;
-    
-    // Calculate today's posts (simplified)
-    const today = new Date().toDateString();
-    // In real implementation, query Firestore for today's count
-    document.getElementById('todayNews').textContent = Math.floor(Math.random() * 3); // Placeholder
-    
-    document.getElementById('lastActivity').textContent = new Date().toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-// Delete News
-function deleteNews(id) {
-    if(confirm("Are you sure you want to delete this article? This action cannot be undone.")) {
-        db.collection("news").doc(id).delete()
-        .then(() => {
-            showToast('Deleted', 'Article has been removed');
-        })
-        .catch(error => {
-            showToast('Error', error.message, 'error');
-        });
+// Close modal on outside click
+document.getElementById('studentModal').addEventListener('click', function(e) {
+    if(e.target === this) {
+        closeModal();
     }
-}
-
-// Edit News (placeholder)
-function editNews(id) {
-    showToast('Info', 'Edit functionality coming soon', 'error');
-}
+});
 </script>
 
 </body>
