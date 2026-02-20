@@ -1,0 +1,33 @@
+<h2>Admin Dashboard</h2>
+
+<input id="reg" placeholder="Register Number">
+<input id="name" placeholder="Student Name">
+
+<button onclick="addStudent()">Add Student</button>
+
+<script type="module">
+
+import { db }
+from "../js/firebase-config.js";
+
+import {
+doc,
+setDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+window.addStudent = async function(){
+
+await setDoc(doc(db,"students",reg.value),{
+
+name:name.value,
+reg:reg.value,
+status:"verified"
+
+});
+
+alert("Student Added");
+
+}
+
+</script>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login - Mizpah Foundations</title>
+</head>
+
+<body>
+
+<h2>Login</h2>
+
+<input id="email">
+<input id="password" type="password">
+
+<button onclick="login()">Login</button>
+
+<script type="module">
+
+import { auth } from './js/firebase-config.js';
+
+import { signInWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+window.login = function(){
+
+const email = email.value;
+const password = password.value;
+
+signInWithEmailAndPassword(auth,email,password)
+.then(()=>{
+
+if(email=="mizpahfoundations123@gmail.com")
+location.href="/admin/dashboard.html";
+else
+location.href="/";
+
+})
+
+.catch(e=>alert(e.message));
+
+}
+
+</script>
+
+</body>
+</html>

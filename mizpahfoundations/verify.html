@@ -1,0 +1,32 @@
+<h2>Certificate Verification</h2>
+
+<input id="reg">
+<button onclick="verify()">Verify</button>
+
+<div id="result"></div>
+
+<script type="module">
+
+import { db }
+from './js/firebase-config.js';
+
+import {
+doc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+window.verify = async function(){
+
+const ref = doc(db,"students",reg.value);
+
+const snap = await getDoc(ref);
+
+if(snap.exists())
+result.innerHTML="Verified: "+snap.data().name;
+else
+result.innerHTML="Not Found";
+
+}
+
+</script>
