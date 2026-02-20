@@ -1,32 +1,29 @@
 <h2>Certificate Verification</h2>
-
-<input id="reg">
+<input id="reg" placeholder="Enter Register Number">
 <button onclick="verify()">Verify</button>
-
 <div id="result"></div>
 
 <script type="module">
-
-import { db }
-from './js/firebase-config.js';
-
-import {
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { db } from './js/firebase-config.js';
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 window.verify = async function(){
+    const regNum = document.getElementById('reg').value.trim();
+    if(!regNum){ alert("Enter Register Number"); return; }
 
-const ref = doc(db,"students",reg.value);
+    const snap = await getDoc(doc(db,"students",regNum));
+    const result = document.getElementById('result');
 
-const snap = await getDoc(ref);
-
-if(snap.exists())
-result.innerHTML="Verified: "+snap.data().name;
-else
-result.innerHTML="Not Found";
-
+    if(snap.exists()){
+        const s = snap.data();
+        result.innerHTML = `
+            <h3>Verified ✅</h3>
+            <img src="${s.imageUrl || 'https://via.placeholder.com/120'}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;">
+            <p><b>Name:</b> ${s.name}</p>
+            <p><b>Register No:</b> ${regNum}</p>
+            <p><b>Course:</b> ${s.course}</p>
+            <p><b>Email:</b> ${s.email}</p>
+        `;
+    } else result.innerHTML = "<h3>❌ Not Found</h3>";
 }
-
 </script>
