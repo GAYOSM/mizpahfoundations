@@ -1,9 +1,26 @@
-// Check admin login
+// ADMIN EMAIL
+const ADMIN_EMAIL = "mizpahfoundations123@gmail.com";
+
+
+// AUTH CHECK
 auth.onAuthStateChanged(user => {
 
 if(!user){
 
-window.location = "/login.html";
+alert("Please login");
+
+window.location="/login.html";
+
+return;
+
+}
+
+if(user.email !== ADMIN_EMAIL){
+
+alert("Access denied");
+
+window.location="/index.html";
+
 return;
 
 }
@@ -13,55 +30,79 @@ loadNews();
 });
 
 
-// Add news
+
+// ADD NEWS
 function addNews(){
 
-const text = document.getElementById("newsText").value;
+const title = document.getElementById("title").value;
+const content = document.getElementById("content").value;
 
-if(text === ""){
-alert("Enter news");
+if(title==="" || content===""){
+
+alert("Enter title and content");
 return;
+
 }
 
 db.collection("news").add({
 
-text: text,
-date: new Date()
+title:title,
+content:content,
+date:new Date()
 
-});
+})
+.then(()=>{
 
-document.getElementById("newsText").value="";
+alert("News published");
+
+document.getElementById("title").value="";
+document.getElementById("content").value="";
+
+})
+.catch(e=>alert(e.message));
 
 }
 
 
-// Load news
+
+// LOAD NEWS
 function loadNews(){
 
 db.collection("news")
 .orderBy("date","desc")
-.onSnapshot(snapshot => {
+.onSnapshot(snapshot=>{
 
-const list = document.getElementById("newsList");
+const list=document.getElementById("newsList");
 
 list.innerHTML="";
 
-snapshot.forEach(doc => {
+snapshot.forEach(doc=>{
 
-const div = document.createElement("div");
+const news=doc.data();
 
-div.className="news-item";
+const date=news.date ?
+news.date.toDate().toLocaleString():"";
 
-div.innerHTML = `
+list.innerHTML+=`
 
-<span>${doc.data().text}</span>
+<div class="news-card">
 
-<button onclick="deleteNews('${doc.id}')">Delete</button>
+<h4>${news.title}</h4>
+
+<p>${news.content}</p>
+
+<small>${date}</small>
+
+<br><br>
+
+<button onclick="deleteNews('${doc.id}')">
+Delete
+</button>
+
+</div>
 
 `;
 
-list.appendChild(div);
-
 });
 
 });
@@ -69,15 +110,23 @@ list.appendChild(div);
 }
 
 
-// Delete news
+
+// DELETE NEWS
 function deleteNews(id){
 
-db.collection("news").doc(id).delete();
+if(confirm("Delete this news?")){
+
+db.collection("news")
+.doc(id)
+.delete();
+
+}
 
 }
 
 
-// Logout
+
+// LOGOUT
 function logout(){
 
 auth.signOut();
