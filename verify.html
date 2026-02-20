@@ -7,23 +7,26 @@
 import { db } from './js/firebase-config.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-window.verify = async function(){
+window.verify = async function() {
     const regNum = document.getElementById('reg').value.trim();
-    if(!regNum){ alert("Enter Register Number"); return; }
+    if(!regNum) return alert("Enter Register Number");
 
-    const snap = await getDoc(doc(db,"students",regNum));
+    const ref = doc(db, "students", regNum);
+    const snap = await getDoc(ref);
+
     const result = document.getElementById('result');
-
     if(snap.exists()){
-        const s = snap.data();
+        const student = snap.data();
         result.innerHTML = `
             <h3>Verified ✅</h3>
-            <img src="${s.imageUrl || 'https://via.placeholder.com/120'}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;">
-            <p><b>Name:</b> ${s.name}</p>
+            <img src="${student.imageUrl || 'https://via.placeholder.com/120'}" alt="${student.name}" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+            <p><b>Name:</b> ${student.name}</p>
             <p><b>Register No:</b> ${regNum}</p>
-            <p><b>Course:</b> ${s.course}</p>
-            <p><b>Email:</b> ${s.email}</p>
+            <p><b>Course:</b> ${student.course}</p>
+            <p><b>Email:</b> ${student.email}</p>
         `;
-    } else result.innerHTML = "<h3>❌ Not Found</h3>";
+    } else {
+        result.innerHTML = "<h3>❌ Not Found</h3>";
+    }
 }
 </script>
