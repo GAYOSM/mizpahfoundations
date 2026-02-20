@@ -2,116 +2,494 @@
 <html>
 <head>
 <title>Login - Mizpah Foundations</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{
-font-family: Arial;
-background:#f4f6f8;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.box{
-background:white;
-padding:30px;
-border-radius:8px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-width:300px;
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
 }
 
-input{
-width:100%;
-padding:10px;
-margin-top:10px;
+/* Animated background shapes */
+body::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -300px;
+    right: -300px;
+    animation: float 20s infinite ease-in-out;
 }
 
-button{
-margin-top:15px;
-padding:10px;
-width:100%;
-background:#0a2a66;
-color:white;
-border:none;
-cursor:pointer;
+body::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    bottom: -200px;
+    left: -200px;
+    animation: float 25s infinite ease-in-out reverse;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -30px) scale(1.1); }
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+}
+
+.box {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 48px 40px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    width: 100%;
+    transform: translateY(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.3), 
+                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.logo-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #0a2a66 0%, #1e4d8c 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 10px 25px rgba(10, 42, 102, 0.3);
+}
+
+.logo-icon svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+}
+
+h2 {
+    color: #1a202c;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: #718096;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    color: #4a5568;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    background: #f7fafc;
+    color: #2d3748;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+input::placeholder {
+    color: #a0aec0;
+}
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0a2a66 0%, #1e4d8c 100%);
+    color: white;
+    margin-top: 8px;
+    box-shadow: 0 4px 6px rgba(10, 42, 102, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 15px rgba(10, 42, 102, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
+    margin-top: 12px;
+}
+
+.btn-secondary:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+    color: #2d3748;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+    color: #a0aec0;
+    font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+.divider span {
+    padding: 0 16px;
+}
+
+.forgot-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.forgot-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.forgot-link a:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+/* Loading animation for buttons */
+.btn.loading {
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error shake animation */
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Success checkmark */
+.success-checkmark {
+    display: none;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #48bb78;
+    margin: 0 auto 20px;
+    align-items: center;
+    justify-content: center;
+    animation: scaleIn 0.3s ease;
+}
+
+.success-checkmark.show {
+    display: flex;
+}
+
+.success-checkmark svg {
+    width: 40px;
+    height: 40px;
+    stroke: white;
+    stroke-width: 3;
+    fill: none;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: drawCheck 0.5s ease forwards 0.2s;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+}
+
+@media (max-width: 480px) {
+    .box {
+        padding: 32px 24px;
+    }
+    
+    h2 {
+        font-size: 24px;
+    }
 }
 </style>
 
 </head>
 <body>
 
-<div class="box">
+<div class="container">
 
-<h2>Login</h2>
+<div class="box" id="loginBox">
 
-<input type="email" id="email" placeholder="Email">
+    <div class="logo-section">
+        <div class="logo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+        </div>
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to your Mizpah Foundations account</p>
+    </div>
 
-<input type="password" id="password" placeholder="Password">
+    <div class="success-checkmark" id="successMark">
+        <svg viewBox="0 0 52 52">
+            <path d="M14 27 L22 35 L38 16"/>
+        </svg>
+    </div>
 
-<button onclick="login()">Login</button>
+    <form id="loginForm" onsubmit="return false;">
+        <div class="input-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="name@company.com" autocomplete="email" required>
+        </div>
 
-<button onclick="register()">Register</button>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="loginBtn" onclick="login()">
+            Sign In
+        </button>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <button type="button" class="btn btn-secondary" id="registerBtn" onclick="register()">
+            Create Account
+        </button>
+    </form>
+
+    <div class="forgot-link">
+        <a href="#" onclick="alert('Please contact admin to reset password'); return false;">Forgot your password?</a>
+    </div>
+
+</div>
 
 </div>
 
 
 <!-- Firebase compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-
 
 <!-- Your real config -->
 <script src="/js/firebase-config.js"></script>
-
 
 <script>
 
 // LOGIN
 function login(){
-
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-
-auth.signInWithEmailAndPassword(email,password)
-
-.then(()=>{
-
-if(email==="mizpahfoundations123@gmail.com")
-window.location="/admin/dashboard.html";
-else
-window.location="/index.html";
-
-})
-
-.catch(e=>alert(e.message));
-
+    const btn = document.getElementById('loginBtn');
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    
+    if(!email || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
+    
+    // Add loading state
+    btn.classList.add('loading');
+    btn.disabled = true;
+    
+    auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        
+        // Show success animation
+        document.getElementById('loginForm').style.display = 'none';
+        document.querySelector('.forgot-link').style.display = 'none';
+        document.querySelector('.divider').style.display = 'none';
+        document.getElementById('successMark').classList.add('show');
+        document.querySelector('h2').textContent = 'Success!';
+        document.querySelector('.subtitle').textContent = 'Redirecting...';
+        
+        setTimeout(() => {
+            if(email === "mizpahfoundations123@gmail.com")
+                window.location = "/admin/dashboard.html";
+            else
+                window.location = "/index.html";
+        }, 1000);
+    })
+    .catch(e => {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        
+        // Shake animation for error
+        const box = document.getElementById('loginBox');
+        box.classList.remove('shake');
+        void box.offsetWidth; // Trigger reflow
+        box.classList.add('shake');
+        
+        alert(e.message);
+    });
 }
-
 
 // REGISTER
 function register(){
-
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-
-auth.createUserWithEmailAndPassword(email,password)
-
-.then(()=>{
-
-alert("Registered successfully");
-
-})
-
-.catch(e=>alert(e.message));
-
+    const btn = document.getElementById('registerBtn');
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    
+    if(!email || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
+    
+    if(password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+    }
+    
+    // Add loading state
+    btn.classList.add('loading');
+    btn.disabled = true;
+    btn.style.color = 'transparent';
+    
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        btn.style.color = '';
+        
+        alert("Account created successfully! Please sign in.");
+        
+        // Clear form
+        document.getElementById("email").value = '';
+        document.getElementById("password").value = '';
+        document.getElementById("email").focus();
+    })
+    .catch(e => {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        btn.style.color = '';
+        
+        const box = document.getElementById('loginBox');
+        box.classList.remove('shake');
+        void box.offsetWidth;
+        box.classList.add('shake');
+        
+        alert(e.message);
+    });
 }
 
+// Allow Enter key to submit
+document.getElementById('password').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') login();
+});
+
+document.getElementById('email').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') document.getElementById('password').focus();
+});
 </script>
 
 </body>
