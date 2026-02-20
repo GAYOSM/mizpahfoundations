@@ -9,12 +9,12 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebas
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDX5tR2JF6wZYoKfxmZY4fMMUh1YZSponQ",
+  authDomain: "mizpahfoundations-70c90.firebaseapp.com",
+  projectId: "mizpahfoundations-70c90",
+  storageBucket: "mizpahfoundations-70c90.firebasestorage.app",
+  messagingSenderId: "1066452149935",
+  appId: "1:1066452149935:web:73d0b2e0370066d78e565a"
 };
 
 const app = initializeApp(firebaseConfig);
