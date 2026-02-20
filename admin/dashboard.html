@@ -1,33 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Admin Dashboard - Mizpah Foundations</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="header">
+
 <h2>Admin Dashboard</h2>
 
-<input id="reg" placeholder="Register Number">
-<input id="name" placeholder="Student Name">
+<button onclick="logout()">Logout</button>
 
-<button onclick="addStudent()">Add Student</button>
+</div>
 
-<script type="module">
 
-import { db }
-from "../js/firebase-config.js";
+<div class="container">
 
-import {
-doc,
-setDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<h3>Add News / Event</h3>
 
-window.addStudent = async function(){
+<textarea id="newsText" placeholder="Enter news or event"></textarea>
 
-await setDoc(doc(db,"students",reg.value),{
+<button onclick="addNews()">Publish</button>
 
-name:name.value,
-reg:reg.value,
-status:"verified"
 
-});
+<h3>All News & Events</h3>
 
-alert("Student Added");
+<div id="newsList"></div>
 
-}
+</div>
 
-</script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script src="../js/firebase-config.js"></script>
+
+<script src="../js/admin.js"></script>
+
+</body>
+
+</html>
