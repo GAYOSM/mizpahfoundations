@@ -4,29 +4,71 @@
 <div id="result"></div>
 
 <script type="module">
+
 import { db } from './js/firebase-config.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-window.verify = async function() {
-    const regNum = document.getElementById('reg').value.trim();
-    if(!regNum) return alert("Enter Register Number");
+const result = document.getElementById('result');
+const regInput = document.getElementById('reg');
+
+async function verifyStudent(regNum){
+
+    if(!regNum){
+        result.innerHTML = "<h3>❌ Invalid Register Number</h3>";
+        return;
+    }
 
     const ref = doc(db, "students", regNum);
     const snap = await getDoc(ref);
 
-    const result = document.getElementById('result');
     if(snap.exists()){
+
         const student = snap.data();
+
         result.innerHTML = `
-            <h3>Verified ✅</h3>
-            <img src="${student.imageUrl || 'https://via.placeholder.com/120'}" alt="${student.name}" style="width:120px; height:120px; object-fit:cover; border-radius:50%;">
+            <h3 style="color:green;">Verified ✅</h3>
+
+            <img src="${student.imageUrl || 'https://via.placeholder.com/120'}"
+            style="width:120px;height:120px;border-radius:50%;object-fit:cover;">
+
             <p><b>Name:</b> ${student.name}</p>
             <p><b>Register No:</b> ${regNum}</p>
-            <p><b>Course:</b> ${student.course}</p>
-            <p><b>Email:</b> ${student.email}</p>
+            <p><b>Course:</b> ${student.course || '-'}</p>
+            <p><b>Email:</b> ${student.email || '-'}</p>
         `;
-    } else {
-        result.innerHTML = "<h3>❌ Not Found</h3>";
+
+    }else{
+
+        result.innerHTML = "<h3 style='color:red;'>❌ Certificate Not Found</h3>";
+
     }
 }
+
+window.verify = async function(){
+
+    const regNum = regInput.value.trim();
+
+    if(!regNum){
+        alert("Enter Register Number");
+        return;
+    }
+
+    verifyStudent(regNum);
+
+}
+
+// ✅ NEW: Auto verify from QR parameter
+
+const params = new URLSearchParams(window.location.search);
+
+const qrReg = params.get("reg");
+
+if(qrReg){
+
+    regInput.value = qrReg;
+
+    verifyStudent(qrReg);
+
+}
+
 </script>
