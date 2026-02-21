@@ -1,71 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Certificate Verification</title>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+body{
+font-family:Arial;
+background:#f4f6f8;
+padding:40px;
+}
+
+.box{
+background:white;
+padding:20px;
+max-width:500px;
+margin:auto;
+border-radius:10px;
+}
+
+button{
+padding:10px;
+background:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
 <h2>Certificate Verification</h2>
 
 <input id="reg" placeholder="Enter Register Number">
+
 <button onclick="verify()">Verify</button>
 
 <div id="result"></div>
 
-<script type="module">
-import { db } from './js/firebase-config.js';
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+</div>
 
-// Main verify function
-window.verify = async function(regOverride = null) {
 
-    const regNum = regOverride || document.getElementById('reg').value.trim();
+<<script>
 
-    if(!regNum){
-        alert("Enter Register Number");
-        return;
-    }
+// 🔥 YOUR FIREBASE CONFIG
 
-    // Set value in textbox (important for URL mode)
-    document.getElementById('reg').value = regNum;
-
-    const ref = doc(db, "students", regNum);
-    const snap = await getDoc(ref);
-
-    const result = document.getElementById('result');
-
-    if(snap.exists()){
-
-        const student = snap.data();
-
-        result.innerHTML = `
-            <h3>Verified ✅</h3>
-
-            <img src="${student.imageUrl || 'https://via.placeholder.com/120'}"
-            style="width:120px;height:120px;border-radius:50%;object-fit:cover">
-
-            <p><b>Name:</b> ${student.name}</p>
-            <p><b>Register No:</b> ${regNum}</p>
-            <p><b>Course:</b> ${student.course}</p>
-            <p><b>Email:</b> ${student.email}</p>
-            <p><b>Graduation Date:</b> ${student.graduationDate || 'Not Available'}</p>
-
-        `;
-
-    } else {
-
-        result.innerHTML = "<h3>❌ Certificate Not Found</h3>";
-
-    }
-
+const firebaseConfig = {
+  apiKey: "AIzaSyDX5tR2JF6wZYoKfxmZY4fMMUh1YZSponQ",
+  authDomain: "mizpahfoundations-70c90.firebaseapp.com",
+  projectId: "mizpahfoundations-70c90",
+  storageBucket: "mizpahfoundations-70c90.appspot.com",
+  messagingSenderId: "1066452149935",
+  appId: "1:1066452149935:web:73d0b2e0370066d78e565a"
 };
 
+firebase.initializeApp(firebaseConfig);
 
-// Auto-load when opening link with ?reg=
-window.addEventListener("DOMContentLoaded", () => {
+const db = firebase.firestore();
 
-    const params = new URLSearchParams(window.location.search);
 
-    const reg = params.get("reg");
+// VERIFY FUNCTION
+async function verify(regOverride){
 
-    if(reg){
+const reg = regOverride || document.getElementById("reg").value.trim();
 
-        verify(reg); // THIS IS THE IMPORTANT FIX
+if(!reg){
+alert("Enter Register Number");
+return;
+}
 
-    }
+// set value in textbox
+document.getElementById("reg").value = reg;
 
-});
+const docRef = db.collection("students").doc(reg);
+
+const docSnap = await docRef.get();
+
+const result=document.getElementById("result");
+
+if(docSnap.exists){
+
+const student = docSnap.data();
+
+result.innerHTML=`
+<h3>Verified ✅</h3>
+
+<img src="${student.imageUrl || 'https://via.placeholder.com/120'}"
+style="width:120px;height:120px;border-radius:50%;object-fit:cover;">
+
+<p><b>Name:</b> ${student.name || '-'}</p>
+<p><b>Register No:</b> ${reg}</p>
+<p><b>Position:</b> ${student.position || '-'}</p>
+<p><b>Graduation Date:</b> ${student.graduationDate || '-'}</p>
+`;
+
+}else{
+
+result.innerHTML="<h3 style='color:red;'>Not Found</h3>";
+
+}
+
+}
+
+
+
+// AUTO VERIFY FROM QR LINK
+window.onload = function(){
+
+const params=new URLSearchParams(window.location.search);
+
+const reg=params.get("reg");
+
+if(reg){
+
+verify(reg);
+
+}
+
+}
+
 </script>
+
+
+</body>
+</html>
