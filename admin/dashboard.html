@@ -1289,26 +1289,28 @@ async function saveStudent(){
         if(currentStudentId){
 
             await db.collection("students")
-            .doc(currentStudentId)
-            .update({
-                name,
-                regNo,
-                position,
-                ...(imageUrl && {imageUrl})
-            });
+.doc(regNo)
+.set({
+    name,
+    regNo,
+    position,
+    ...(imageUrl && {imageUrl}),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+});
 
             showToast("Updated","Student updated");
 
         }else{
 
             await db.collection("students")
-            .add({
-                name,
-                regNo,
-                position,
-                imageUrl,
-                createdAt:firebase.firestore.FieldValue.serverTimestamp()
-            });
+.doc(regNo) // 🔥 SET REGISTER NUMBER AS DOC ID
+.set({
+    name,
+    regNo,
+    position,
+    imageUrl,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+});
 
             showToast("Added","Student added");
 
