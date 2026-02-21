@@ -1,159 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Certificate Verification</title>
 
-<style>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
+<style>
 body{
-font-family: Arial;
+font-family:Arial;
 background:#f4f6f8;
 padding:40px;
 }
 
-.container{
+.box{
 background:white;
 padding:20px;
-border-radius:10px;
 max-width:500px;
 margin:auto;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-
-input{
-padding:10px;
-width:70%;
-margin-right:10px;
+border-radius:10px;
 }
 
 button{
-padding:10px 15px;
+padding:10px;
 background:#2563eb;
 color:white;
 border:none;
 cursor:pointer;
 }
 
-img{
-margin-top:10px;
-}
-
 </style>
 
 </head>
+
 <body>
 
-<div class="container">
+<div class="box">
 
 <h2>Certificate Verification</h2>
 
 <input id="reg" placeholder="Enter Register Number">
 
-<button id="verifyBtn">Verify</button>
+<button onclick="verify()">Verify</button>
 
-<div id="result" style="margin-top:20px;"></div>
+<div id="result"></div>
 
 </div>
 
 
-<script type="module">
+<script>
 
-import { db } from './js/firebase-config.js';
+// 🔥 YOUR FIREBASE CONFIG (copy same from firebase-config.js)
 
-import {
-doc,
-getDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDX5tR2JF6wZYoKfxmZY4fMMUh1YZSponQ",
+  authDomain: "mizpahfoundations-70c90.firebaseapp.com",
+  projectId: "mizpahfoundations-70c90",
+  storageBucket: "mizpahfoundations-70c90.appspot.com",
+  messagingSenderId: "1066452149935",
+  appId: "1:1066452149935:web:73d0b2e0370066d78e565a"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
 
 
-const regInput = document.getElementById("reg");
+// VERIFY FUNCTION
+async function verify(){
 
-const result = document.getElementById("result");
+const reg = document.getElementById("reg").value.trim();
 
-const verifyBtn = document.getElementById("verifyBtn");
-
-
-// ✅ Main Verify Function
-async function verifyStudent(regNum){
-
-if(!regNum){
-
-result.innerHTML="<span style='color:red'>Enter Register Number</span>";
-
+if(!reg){
+alert("Enter Register Number");
 return;
-
 }
 
-try{
+const docRef = db.collection("students").doc(reg);
 
-const ref = doc(db,"students",regNum);
+const doc = await docRef.get();
 
-const snap = await getDoc(ref);
+const result=document.getElementById("result");
 
-if(snap.exists()){
+if(doc.exists){
 
-const s = snap.data();
+const s=doc.data();
 
-result.innerHTML = `
-
+result.innerHTML=`
 <h3 style="color:green;">Verified ✅</h3>
 
 <img src="${s.imageUrl || 'https://via.placeholder.com/120'}"
-width="120"
-style="border-radius:50%;object-fit:cover;">
+width="120">
 
 <p><b>Name:</b> ${s.name}</p>
 
-<p><b>Register Number:</b> ${regNum}</p>
+<p><b>Register Number:</b> ${reg}</p>
 
-<p><b>Position:</b> ${s.position || '-'}</p>
-
-<p><b>Email:</b> ${s.email || '-'}</p>
-
+<p><b>Position:</b> ${s.position}</p>
 `;
 
 }else{
 
-result.innerHTML="<h3 style='color:red'>❌ Certificate Not Found</h3>";
-
-}
-
-}catch(error){
-
-result.innerHTML="<span style='color:red'>Error loading data</span>";
-
-console.error(error);
+result.innerHTML="<h3 style='color:red;'>Not Found</h3>";
 
 }
 
 }
 
 
-// ✅ Button Click Event
-verifyBtn.onclick=function(){
 
-verifyStudent(regInput.value.trim());
+// AUTO VERIFY FROM QR LINK
+const params=new URLSearchParams(window.location.search);
 
-}
+const reg=params.get("reg");
 
+if(reg){
 
-// ✅ AUTO VERIFY FROM QR LINK
-const params = new URLSearchParams(window.location.search);
+document.getElementById("reg").value=reg;
 
-const regFromURL = params.get("reg");
-
-if(regFromURL){
-
-regInput.value = regFromURL;
-
-verifyStudent(regFromURL);
+verify();
 
 }
 
 </script>
+
 
 </body>
 </html>
