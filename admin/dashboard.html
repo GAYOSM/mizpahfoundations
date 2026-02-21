@@ -904,6 +904,10 @@ header {
                         <div class="detail-value" id="detailDate">-</div>
                     </div>
                     <div class="detail-item">
+    <div class="detail-label">Graduation Date</div>
+    <div class="detail-value" id="detailGraduationDate">-</div>
+</div>
+                    <div class="detail-item">
                         <div class="detail-label">Status</div>
                         <div class="detail-value" style="color: var(--success);">
                             <i class="fas fa-check-circle"></i> Active
@@ -962,6 +966,10 @@ header {
                         <option value="Coordinator">Coordinator</option>
                     </select>
                 </div>
+                <div class="form-group">
+    <label class="form-label">Graduation Date *</label>
+    <input type="date" id="studentGraduationDate" class="form-input" required>
+</div>
                 
                 <div class="form-group">
                     <label class="form-label">Student Photo</label>
@@ -1185,6 +1193,8 @@ function filterStudents(){
     document.getElementById("detailPosition").textContent=s.position;
     document.getElementById("detailPositionBadge").textContent=s.position;
     document.getElementById("detailImage").src=s.imageUrl||"https://via.placeholder.com/150";
+    document.getElementById("detailGraduationDate").textContent =
+    s.graduationDate || "-";
 
     // ✅ ADD THIS PART
     const verifyLink = `https://mizpahfoundations.org/verify.html?reg=${s.regNo}`;
@@ -1269,6 +1279,7 @@ async function saveStudent(){
     const name=document.getElementById("studentName").value;
     const regNo=document.getElementById("studentRegNo").value;
     const position=document.getElementById("studentPosition").value;
+    const graduationDate = document.getElementById("studentGraduationDate").value;
 
     try{
 
@@ -1294,7 +1305,8 @@ async function saveStudent(){
     name,
     regNo,
     position,
-    ...(imageUrl && {imageUrl}),
+    imageUrl,
+    graduationDate,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
 });
 
@@ -1309,6 +1321,7 @@ async function saveStudent(){
     regNo,
     position,
     imageUrl,
+    graduationDate,
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
 });
 
