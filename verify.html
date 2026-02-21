@@ -33,7 +33,7 @@ async function verifyStudent(regNum){
 
             <p><b>Name:</b> ${student.name}</p>
             <p><b>Register No:</b> ${regNum}</p>
-            <p><b>Course:</b> ${student.course || '-'}</p>
+            <p><b>Position:</b> ${student.position || '-'}</p>
             <p><b>Email:</b> ${student.email || '-'}</p>
         `;
 
@@ -44,7 +44,8 @@ async function verifyStudent(regNum){
     }
 }
 
-window.verify = async function(){
+// Manual verify button
+window.verify = function(){
 
     const regNum = regInput.value.trim();
 
@@ -57,17 +58,17 @@ window.verify = async function(){
 
 }
 
-// ✅ NEW: Auto verify from QR parameter
 
+// ✅ AUTO VERIFY FROM QR LINK
 const params = new URLSearchParams(window.location.search);
 
-const qrReg = params.get("reg");
+const regFromURL = params.get("reg");
 
-if(qrReg){
+if(regFromURL){
 
-    regInput.value = qrReg;
+    regInput.value = regFromURL;
 
-    verifyStudent(qrReg);
+    verifyStudent(regFromURL);
 
 }
 
