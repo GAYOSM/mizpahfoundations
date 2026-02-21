@@ -909,6 +909,14 @@ header {
                             <i class="fas fa-check-circle"></i> Active
                         </div>
                     </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Verification Link</div>
+                        <div class="detail-value">
+                            <a id="detailVerifyLink" href="#" target="_blank" style="color:#2563eb; word-break:break-all;">
+            -
+        </a>
+    </div>
+</div>
                 </div>
                 
                 <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: flex-end;">
@@ -1163,7 +1171,7 @@ function filterStudents(){
 
 /* ================= VIEW ================= */
 
-function viewStudent(id){
+    function viewStudent(id){
 
     const s=currentStudents.find(x=>x.id===id);
 
@@ -1177,6 +1185,14 @@ function viewStudent(id){
     document.getElementById("detailPosition").textContent=s.position;
     document.getElementById("detailPositionBadge").textContent=s.position;
     document.getElementById("detailImage").src=s.imageUrl||"https://via.placeholder.com/150";
+
+    // ✅ ADD THIS PART
+    const verifyLink = `https://mizpahfoundations.org/verify.html?reg=${s.regNo}`;
+
+    const linkElement = document.getElementById("detailVerifyLink");
+
+    linkElement.href = verifyLink;
+    linkElement.textContent = verifyLink;
 
 }
 
