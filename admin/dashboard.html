@@ -1231,6 +1231,10 @@ function openAddModal(){
 
     document.getElementById("studentModal").classList.add("active");
 
+    document.getElementById("studentGraduationDate").value = "";
+
+    selectedImageFile = null;
+
 }
 
 function closeModal(){
@@ -1241,15 +1245,32 @@ function closeModal(){
 
 function openEditModal(id){
 
-    const s=currentStudents.find(x=>x.id===id);
+    const s = currentStudents.find(x => x.id === id);
 
-    currentStudentId=id;
+    if(!s){
+        showToast("Error","Student not found","error");
+        return;
+    }
 
-    document.getElementById("modalTitle").textContent="Edit Student";
+    currentStudentId = id;
 
-    document.getElementById("studentName").value=s.name;
-    document.getElementById("studentRegNo").value=s.regNo;
-    document.getElementById("studentPosition").value=s.position;
+    document.getElementById("modalTitle").textContent = "Edit Student";
+
+    // Fill form fields
+    document.getElementById("studentName").value = s.name || "";
+    document.getElementById("studentRegNo").value = s.regNo || "";
+    document.getElementById("studentPosition").value = s.position || "";
+
+    // ✅ IMPORTANT FIX: load graduation date
+    document.getElementById("studentGraduationDate").value =
+        s.graduationDate || "";
+
+    // Show existing image preview
+    if(s.imageUrl){
+        document.getElementById("imagePreview").src = s.imageUrl;
+        document.getElementById("imagePreview").classList.remove("hidden");
+        document.getElementById("uploadPlaceholder").classList.add("hidden");
+    }
 
     document.getElementById("studentModal").classList.add("active");
 
@@ -1293,52 +1314,89 @@ async function saveStudent(){
     document.getElementById("studentGraduationDate").value;
 
     if(!name || !regNo || !position || !graduationDate){
-        showToast("Error","Fill all required fields","error");
+
+        showToast(
+            "Error",
+            "Fill all required fields",
+            "error"
+        );
+
         return;
     }
 
     try{
 
-        let imageUrl = "";
-
-        // Upload image if selected
-        if(selectedImageFile){
-
-            const storageRef =
-            storage.ref("students/" + Date.now());
-
-            await storageRef.put(selectedImageFile);
-
-            imageUrl =
-            await storageRef.getDownloadURL();
-        }
-
-        // IMPORTANT: safe doc ID
+        // Safe Firestore document ID
         const docId =
         regNo.replaceAll("/", "_");
 
+        // Get existing data (important for edit)
+        const existingDoc =
+        await db.collection("students")
+        .doc(docId)
+        .get();
+
+        let imageUrl = "";
+
+        if(existingDoc.exists){
+            imageUrl =
+            existingDoc.data().imageUrl || "";
+        }
+
+        // Upload new image if selected
+        if(selectedImageFile){
+
+            const storageRef =
+            storage.ref(
+                "students/" + docId
+            );
+
+            await storageRef.put(
+                selectedImageFile
+            );
+
+            imageUrl =
+            await storageRef.getDownloadURL();
+
+        }
+
+        // Prepare student data
         const studentData = {
 
             name: name,
             regNo: regNo,
             position: position,
             graduationDate: graduationDate,
-            imageUrl: imageUrl || "",
-            createdAt:
-            firebase.firestore.FieldValue.serverTimestamp()
+            imageUrl: imageUrl,
 
         };
 
-        // Update or create
+        // Only add createdAt if NEW student
+        if(!existingDoc.exists){
+
+            studentData.createdAt =
+            firebase.firestore.FieldValue
+            .serverTimestamp();
+
+        }
+
+        // Save to Firestore
         await db.collection("students")
         .doc(docId)
-        .set(studentData);
+        .set(
+            studentData,
+            { merge: true }
+        );
 
         closeModal();
 
+        selectedImageFile = null;
+
         showToast(
             "Success",
-            "Student saved successfully"
+            existingDoc.exists ?
+            "Student updated successfully" :
+            "Student added successfully"
         );
 
     }
@@ -1353,6 +1411,7 @@ async function saveStudent(){
         );
 
     }
+
 }
 
 /* ================= DELETE ================= */
