@@ -1003,367 +1003,345 @@ const storage = firebase.storage();
 
 let currentStudents = [];
 let currentStudentId = null;
+let selectedImageFile = null;
 
-// Protect dashboard
+/* ================= AUTH PROTECTION ================= */
+
 auth.onAuthStateChanged(user => {
-    if(!user) {
+
+    if(!user){
         window.location = "/login.html";
         return;
     }
-    
-    if(user.email !== "mizpahfoundations123@gmail.com") {
-        showToast('Access Denied', 'You do not have permission to view this page', 'error');
-        setTimeout(() => {
-            window.location = "/index.html";
-        }, 2000);
-    } else {
-        document.getElementById('userEmail').textContent = user.email;
-        loadStudents();
+
+    if(user.email !== "mizpahfoundations123@gmail.com"){
+        showToast("Access Denied","You are not authorized","error");
+        setTimeout(()=> window.location="/index.html",2000);
+        return;
     }
+
+    document.getElementById("userEmail").textContent = user.email;
+    loadStudents();
+
 });
 
-// Toast notification
-function showToast(title, message, type = 'success') {
-    const toast = document.getElementById('toast');
-    const toastTitle = toast.querySelector('.toast-title');
-    const toastMessage = document.getElementById('toastMessage');
-    const toastIcon = toast.querySelector('.toast-icon');
-    
-    toastTitle.textContent = title;
-    toastMessage.textContent = message;
-    
-    if(type === 'error') {
-        toast.style.borderLeftColor = 'var(--danger)';
-        toastIcon.className = 'fas fa-exclamation-circle toast-icon';
-        toastIcon.style.color = 'var(--danger)';
-    } else {
-        toast.style.borderLeftColor = 'var(--success)';
-        toastIcon.className = 'fas fa-check-circle toast-icon';
-        toastIcon.style.color = 'var(--success)';
+/* ================= TOAST ================= */
+
+function showToast(title,message,type="success"){
+
+    const toast = document.getElementById("toast");
+    const icon = toast.querySelector(".toast-icon");
+
+    toast.querySelector(".toast-title").textContent = title;
+    document.getElementById("toastMessage").textContent = message;
+
+    if(type==="error"){
+        toast.style.borderLeftColor="var(--danger)";
+        icon.className="fas fa-exclamation-circle toast-icon";
+        icon.style.color="var(--danger)";
+    }else{
+        toast.style.borderLeftColor="var(--success)";
+        icon.className="fas fa-check-circle toast-icon";
+        icon.style.color="var(--success)";
     }
-    
-    toast.classList.add('show');
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },3000);
 }
 
-// Logout
-function logout() {
-    auth.signOut().then(() => {
-        window.location = "/login.html";
-    });
+/* ================= LOGOUT ================= */
+
+function logout(){
+    auth.signOut();
 }
 
-// Load Students
-function loadStudents() {
-    const grid = document.getElementById('studentsGrid');
-    
-    // Show loading skeleton
-    grid.innerHTML = `
-        <div class="skeleton" style="height: 300px;"></div>
-        <div class="skeleton" style="height: 300px;"></div>
-        <div class="skeleton" style="height: 300px;"></div>
-    `;
-    
+/* ================= LOAD STUDENTS ================= */
+
+function loadStudents(){
+
     db.collection("students")
-    .orderBy("createdAt", "desc")
-    .onSnapshot(snapshot => {
-        currentStudents = [];
-        snapshot.forEach(doc => {
-            currentStudents.push({ id: doc.id, ...doc.data() });
+    .orderBy("createdAt","desc")
+    .onSnapshot(snapshot=>{
+
+        currentStudents=[];
+
+        snapshot.forEach(doc=>{
+            currentStudents.push({
+                id:doc.id,
+                ...doc.data()
+            });
         });
-        
+
         renderStudents(currentStudents);
         updateStats(currentStudents);
+
     });
+
 }
 
-// Render Students Grid
-function renderStudents(students) {
-    const grid = document.getElementById('studentsGrid');
-    
-    if(students.length === 0) {
-        grid.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-user-graduate"></i>
-                <h4>No students found</h4>
-                <p>Add your first student to get started</p>
-            </div>
-        `;
+/* ================= RENDER ================= */
+
+function renderStudents(list){
+
+    const grid=document.getElementById("studentsGrid");
+
+    if(list.length===0){
+        grid.innerHTML=`<div class="empty-state">No students</div>`;
         return;
     }
-    
-    grid.innerHTML = students.map(student => `
-        <div class="student-card" onclick="viewStudent('${student.id}')">
-            <img src="${student.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${student.name}" class="student-image">
-            <div class="student-info">
-                <h4 class="student-name">${escapeHtml(student.name)}</h4>
-                <div class="student-meta">
-                    <span><i class="fas fa-id-card"></i> ${escapeHtml(student.regNo)}</span>
-                </div>
-                <span class="position-badge ${student.position.toLowerCase()}">${student.position}</span>
+
+    grid.innerHTML=list.map(s=>`
+
+    <div class="student-card" onclick="viewStudent('${s.id}')">
+
+        <img src="${s.imageUrl||'https://via.placeholder.com/300x200'}" class="student-image">
+
+        <div class="student-info">
+
+            <div class="student-name">${escapeHtml(s.name)}</div>
+
+            <div class="student-meta">
+                ${escapeHtml(s.regNo)}
             </div>
-            <div class="student-actions" onclick="event.stopPropagation()">
-                <button class="btn-icon btn-edit" onclick="openEditModal('${student.id}')">
-                    <i class="fas fa-edit"></i> Edit
-                </button>
-                <button class="btn-icon btn-delete" onclick="deleteStudent('${student.id}')">
-                    <i class="fas fa-trash-alt"></i> Delete
-                </button>
-            </div>
+
+            <span class="position-badge ${s.position.toLowerCase()}">
+                ${s.position}
+            </span>
+
         </div>
-    `).join('');
+
+        <div class="student-actions" onclick="event.stopPropagation()">
+
+            <button class="btn-icon btn-edit"
+            onclick="openEditModal('${s.id}')">
+            Edit
+            </button>
+
+            <button class="btn-icon btn-delete"
+            onclick="deleteStudent('${s.id}')">
+            Delete
+            </button>
+
+        </div>
+
+    </div>
+
+    `).join("");
+
 }
 
-// Update Statistics
-function updateStats(students) {
-    const total = students.length;
-    document.getElementById('totalStudents').textContent = total;
-    
-    // Count by position
-    const positionCounts = {};
-    students.forEach(s => {
-        positionCounts[s.position] = (positionCounts[s.position] || 0) + 1;
-    });
-    
-    // Render position stats
-    const statsGrid = document.getElementById('statsGrid');
-    // Keep first card (total), remove others
-    while(statsGrid.children.length > 1) {
-        statsGrid.removeChild(statsGrid.lastChild);
-    }
-    
-    const positionColors = {
-        'Leader': 'blue',
-        'Member': 'green',
-        'Volunteer': 'orange',
-        'Coordinator': 'purple'
-    };
-    
-    const positionIcons = {
-        'Leader': 'fa-crown',
-        'Member': 'fa-user',
-        'Volunteer': 'fa-hands-helping',
-        'Coordinator': 'fa-tasks'
-    };
-    
-    Object.entries(positionCounts).forEach(([position, count]) => {
-        const card = document.createElement('div');
-        card.className = 'stat-card';
-        card.innerHTML = `
-            <div class="stat-header">
-                <div>
-                    <div class="stat-label">${position}s</div>
-                    <div class="stat-value">${count}</div>
-                </div>
-                <div class="stat-icon ${positionColors[position] || 'blue'}">
-                    <i class="fas ${positionIcons[position] || 'fa-user'}"></i>
-                </div>
-            </div>
-        `;
-        statsGrid.appendChild(card);
-    });
+/* ================= STATS ================= */
+
+function updateStats(students){
+
+    document.getElementById("totalStudents").textContent=students.length;
+
 }
 
-// Filter Students
-function filterStudents() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const positionFilter = document.getElementById('positionFilter').value;
-    
-    const filtered = currentStudents.filter(student => {
-        const matchesSearch = student.name.toLowerCase().includes(searchTerm) || 
-                             student.regNo.toLowerCase().includes(searchTerm);
-        const matchesPosition = !positionFilter || student.position === positionFilter;
-        return matchesSearch && matchesPosition;
+/* ================= FILTER ================= */
+
+function filterStudents(){
+
+    const search=document.getElementById("searchInput").value.toLowerCase();
+    const pos=document.getElementById("positionFilter").value;
+
+    const filtered=currentStudents.filter(s=>{
+
+        const matchSearch=
+        s.name.toLowerCase().includes(search)||
+        s.regNo.toLowerCase().includes(search);
+
+        const matchPos=!pos || s.position===pos;
+
+        return matchSearch && matchPos;
+
     });
-    
+
     renderStudents(filtered);
+
 }
 
-// View Student Detail (Template-based)
-function viewStudent(id) {
-    const student = currentStudents.find(s => s.id === id);
-    if(!student) return;
-    
-    currentStudentId = id;
-    
-    document.getElementById('detailImage').src = student.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
-    document.getElementById('detailName').textContent = student.name;
-    document.getElementById('detailPosition').textContent = student.position;
-    document.getElementById('detailRegNo').textContent = student.regNo;
-    document.getElementById('detailPositionBadge').textContent = student.position;
-    document.getElementById('detailDate').textContent = student.createdAt ? 
-        student.createdAt.toDate().toLocaleDateString() : 'Unknown';
-    
-    document.getElementById('dashboardView').classList.add('hidden');
-    document.getElementById('studentDetailView').classList.remove('hidden');
-    window.scrollTo(0, 0);
+/* ================= VIEW ================= */
+
+function viewStudent(id){
+
+    const s=currentStudents.find(x=>x.id===id);
+
+    currentStudentId=id;
+
+    document.getElementById("dashboardView").classList.add("hidden");
+    document.getElementById("studentDetailView").classList.remove("hidden");
+
+    document.getElementById("detailName").textContent=s.name;
+    document.getElementById("detailRegNo").textContent=s.regNo;
+    document.getElementById("detailPosition").textContent=s.position;
+    document.getElementById("detailPositionBadge").textContent=s.position;
+    document.getElementById("detailImage").src=s.imageUrl||"https://via.placeholder.com/150";
+
 }
 
-// Show Dashboard
-function showDashboard() {
-    document.getElementById('studentDetailView').classList.add('hidden');
-    document.getElementById('dashboardView').classList.remove('hidden');
-    currentStudentId = null;
+/* ================= SHOW DASHBOARD ================= */
+
+function showDashboard(){
+
+    document.getElementById("studentDetailView").classList.add("hidden");
+    document.getElementById("dashboardView").classList.remove("hidden");
+
 }
 
-// Edit Current Student (from detail view)
-function editCurrentStudent() {
-    if(currentStudentId) {
-        openEditModal(currentStudentId);
+/* ================= MODAL ================= */
+
+function openAddModal(){
+
+    currentStudentId=null;
+
+    document.getElementById("modalTitle").textContent="Add Student";
+
+    document.getElementById("studentForm").reset();
+
+    document.getElementById("studentModal").classList.add("active");
+
+}
+
+function closeModal(){
+
+    document.getElementById("studentModal").classList.remove("active");
+
+}
+
+function openEditModal(id){
+
+    const s=currentStudents.find(x=>x.id===id);
+
+    currentStudentId=id;
+
+    document.getElementById("modalTitle").textContent="Edit Student";
+
+    document.getElementById("studentName").value=s.name;
+    document.getElementById("studentRegNo").value=s.regNo;
+    document.getElementById("studentPosition").value=s.position;
+
+    document.getElementById("studentModal").classList.add("active");
+
+}
+
+/* ================= IMAGE ================= */
+
+function previewImage(e){
+
+    selectedImageFile=e.target.files[0];
+
+    const reader=new FileReader();
+
+    reader.onload=function(){
+
+        document.getElementById("imagePreview").src=reader.result;
+        document.getElementById("imagePreview").classList.remove("hidden");
+
+        document.getElementById("uploadPlaceholder").classList.add("hidden");
+
     }
+
+    reader.readAsDataURL(selectedImageFile);
+
 }
 
-// Modal Functions
-function openAddModal() {
-    document.getElementById('modalTitle').textContent = 'Add New Student';
-    document.getElementById('studentForm').reset();
-    document.getElementById('studentId').value = '';
-    document.getElementById('imagePreview').classList.add('hidden');
-    document.getElementById('uploadPlaceholder').classList.remove('hidden');
-    document.getElementById('imageUpload').classList.remove('has-image');
-    document.getElementById('studentModal').classList.add('active');
-}
+/* ================= SAVE ================= */
 
-function openEditModal(id) {
-    const student = currentStudents.find(s => s.id === id);
-    if(!student) return;
-    
-    document.getElementById('modalTitle').textContent = 'Edit Student';
-    document.getElementById('studentId').value = id;
-    document.getElementById('studentName').value = student.name;
-    document.getElementById('studentRegNo').value = student.regNo;
-    document.getElementById('studentPosition').value = student.position;
-    
-    if(student.imageUrl) {
-        document.getElementById('imagePreview').src = student.imageUrl;
-        document.getElementById('imagePreview').classList.remove('hidden');
-        document.getElementById('uploadPlaceholder').classList.add('hidden');
-        document.getElementById('imageUpload').classList.add('has-image');
-    } else {
-        document.getElementById('imagePreview').classList.add('hidden');
-        document.getElementById('uploadPlaceholder').classList.remove('hidden');
-        document.getElementById('imageUpload').classList.remove('has-image');
-    }
-    
-    document.getElementById('studentModal').classList.add('active');
-}
+async function saveStudent(){
 
-function closeModal() {
-    document.getElementById('studentModal').classList.remove('active');
-}
+    const name=document.getElementById("studentName").value;
+    const regNo=document.getElementById("studentRegNo").value;
+    const position=document.getElementById("studentPosition").value;
 
-// Image Preview
-function previewImage(event) {
-    const file = event.target.files[0];
-    if(file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('imagePreview').src = e.target.result;
-            document.getElementById('imagePreview').classList.remove('hidden');
-            document.getElementById('uploadPlaceholder').classList.add('hidden');
-            document.getElementById('imageUpload').classList.add('has-image');
-        };
-        reader.readAsDataURL(file);
-    }
-}
+    try{
 
-// Save Student
-async function saveStudent() {
-    const id = document.getElementById('studentId').value;
-    const name = document.getElementById('studentName').value.trim();
-    const regNo = document.getElementById('studentRegNo').value.trim();
-    const position = document.getElementById('studentPosition').value;
-    const imageFile = document.getElementById('studentImage').files[0];
-    const btn = document.getElementById('saveBtn');
-    
-    if(!name || !regNo || !position) {
-        showToast('Error', 'Please fill in all required fields', 'error');
-        return;
-    }
-    
-    // Check for duplicate regNo
-    const duplicate = currentStudents.find(s => s.regNo === regNo && s.id !== id);
-    if(duplicate) {
-        showToast('Error', 'Register number already exists', 'error');
-        return;
-    }
-    
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Saving...';
-    
-    try {
-        let imageUrl = null;
-        
-        // Upload image if provided
-        if(imageFile) {
-            const storageRef = storage.ref(`students/${Date.now()}_${imageFile.name}`);
-            await storageRef.put(imageFile);
-            imageUrl = await storageRef.getDownloadURL();
+        let imageUrl="";
+
+        if(selectedImageFile){
+
+            const ref=storage
+            .ref()
+            .child("students/"+Date.now());
+
+            await ref.put(selectedImageFile);
+
+            imageUrl=await ref.getDownloadURL();
+
         }
-        
-        const studentData = {
-            name: name,
-            regNo: regNo,
-            position: position,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        
-        if(imageUrl) {
-            studentData.imageUrl = imageUrl;
+
+        if(currentStudentId){
+
+            await db.collection("students")
+            .doc(currentStudentId)
+            .update({
+                name,
+                regNo,
+                position,
+                ...(imageUrl && {imageUrl})
+            });
+
+            showToast("Updated","Student updated");
+
+        }else{
+
+            await db.collection("students")
+            .add({
+                name,
+                regNo,
+                position,
+                imageUrl,
+                createdAt:firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            showToast("Added","Student added");
+
         }
-        
-        if(id) {
-            // Update existing
-            const existing = currentStudents.find(s => s.id === id);
-            if(existing && !imageUrl && existing.imageUrl) {
-                studentData.imageUrl = existing.imageUrl;
-            }
-            await db.collection("students").doc(id).update(studentData);
-            showToast('Updated!', 'Student information updated successfully');
-        } else {
-            // Add new
-            studentData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-            await db.collection("students").add(studentData);
-            showToast('Added!', 'New student added successfully');
-        }
-        
+
         closeModal();
-    } catch(error) {
-        showToast('Error', error.message, 'error');
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-save"></i> Save Student';
+
     }
+    catch(err){
+
+        showToast("Error",err.message,"error");
+
+    }
+
 }
 
-// Delete Student
-function deleteStudent(id) {
-    if(confirm("Are you sure you want to delete this student? This action cannot be undone.")) {
-        db.collection("students").doc(id).delete()
-        .then(() => {
-            showToast('Deleted', 'Student has been removed');
-        })
-        .catch(error => {
-            showToast('Error', error.message, 'error');
-        });
-    }
+/* ================= DELETE ================= */
+
+async function deleteStudent(id){
+
+    if(!confirm("Delete student?")) return;
+
+    await db.collection("students").doc(id).delete();
+
+    showToast("Deleted","Student removed");
+
 }
 
-// Helper functions
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
+/* ================= EDIT FROM DETAIL ================= */
+
+function editCurrentStudent(){
+
+    openEditModal(currentStudentId);
+
+}
+
+/* ================= ESCAPE ================= */
+
+function escapeHtml(text){
+
+    const div=document.createElement("div");
+    div.textContent=text;
     return div.innerHTML;
+
 }
 
-// Close modal on outside click
-document.getElementById('studentModal').addEventListener('click', function(e) {
-    if(e.target === this) {
-        closeModal();
-    }
-});
 </script>
 
 </body>
