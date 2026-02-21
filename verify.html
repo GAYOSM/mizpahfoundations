@@ -291,7 +291,9 @@ async function verify(regOverride){
   document.getElementById("reg").value = reg;
 
   try {
-    const docRef = db.collection("students").doc(reg);
+    const docId = reg.replaceAll("/", "_");
+
+const docRef = db.collection("students").doc(docId);
     const docSnap = await docRef.get();
     const result = document.getElementById("result");
 

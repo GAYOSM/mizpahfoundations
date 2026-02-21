@@ -1196,7 +1196,9 @@ function filterStudents(){
     s.graduationDate || "-";
 
     // ✅ ADD THIS PART
-    const verifyLink = `https://mizpahfoundations.org/verify.html?reg=${s.regNo}`;
+    const verifyLink =
+"https://mizpahfoundations.org/verify.html?reg=" +
+encodeURIComponent(student.regNo);
 
     const linkElement = document.getElementById("detailVerifyLink");
 
@@ -1300,13 +1302,14 @@ async function saveStudent(){
 
             await db.collection("students")
 .doc(regNo)
-.set({
-    name,
-    regNo,
-    position,
-    imageUrl,
-    graduationDate,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+const docId = regNo.replaceAll("/", "_");
+await db.collection("students").doc(docId).set({
+    regNo: regNo, // original register number stored
+    name: name,
+    position: position,
+    graduationDate: graduationDate,
+    imageUrl: imageUrl,
+    createdAt: new Date()
 });
 
             showToast("Updated","Student updated");
