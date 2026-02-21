@@ -1178,29 +1178,32 @@ function filterStudents(){
 
 /* ================= VIEW ================= */
 
-    function viewStudent(id){
+function viewStudent(id){
 
-    const s=currentStudents.find(x=>x.id===id);
+    const s = currentStudents.find(x => x.id === id);
 
-    currentStudentId=id;
+    currentStudentId = id;
 
     document.getElementById("dashboardView").classList.add("hidden");
     document.getElementById("studentDetailView").classList.remove("hidden");
 
-    document.getElementById("detailName").textContent=s.name;
-    document.getElementById("detailRegNo").textContent=s.regNo;
-    document.getElementById("detailPosition").textContent=s.position;
-    document.getElementById("detailPositionBadge").textContent=s.position;
-    document.getElementById("detailImage").src=s.imageUrl||"https://via.placeholder.com/150";
+    document.getElementById("detailName").textContent = s.name;
+    document.getElementById("detailRegNo").textContent = s.regNo;
+    document.getElementById("detailPosition").textContent = s.position;
+    document.getElementById("detailPositionBadge").textContent = s.position;
+    document.getElementById("detailImage").src =
+        s.imageUrl || "https://via.placeholder.com/150";
+
     document.getElementById("detailGraduationDate").textContent =
-    s.graduationDate || "-";
+        s.graduationDate || "-";
 
-    // ✅ ADD THIS PART
+    // ✅ FIXED
     const verifyLink =
-"https://mizpahfoundations.org/verify.html?reg=" +
-encodeURIComponent(student.regNo);
+    "https://mizpahfoundations.org/verify.html?reg=" +
+    encodeURIComponent(s.regNo);
 
-    const linkElement = document.getElementById("detailVerifyLink");
+    const linkElement =
+    document.getElementById("detailVerifyLink");
 
     linkElement.href = verifyLink;
     linkElement.textContent = verifyLink;
@@ -1277,69 +1280,79 @@ function previewImage(e){
 
 async function saveStudent(){
 
-    const name=document.getElementById("studentName").value;
-    const regNo=document.getElementById("studentRegNo").value;
-    const position=document.getElementById("studentPosition").value;
-    const graduationDate = document.getElementById("studentGraduationDate").value;
+    const name =
+    document.getElementById("studentName").value.trim();
+
+    const regNo =
+    document.getElementById("studentRegNo").value.trim();
+
+    const position =
+    document.getElementById("studentPosition").value;
+
+    const graduationDate =
+    document.getElementById("studentGraduationDate").value;
+
+    if(!name || !regNo || !position || !graduationDate){
+        showToast("Error","Fill all required fields","error");
+        return;
+    }
 
     try{
 
-        let imageUrl="";
+        let imageUrl = "";
 
+        // Upload image if selected
         if(selectedImageFile){
 
-            const ref=storage
-            .ref()
-            .child("students/"+Date.now());
+            const storageRef =
+            storage.ref("students/" + Date.now());
 
-            await ref.put(selectedImageFile);
+            await storageRef.put(selectedImageFile);
 
-            imageUrl=await ref.getDownloadURL();
-
+            imageUrl =
+            await storageRef.getDownloadURL();
         }
 
-        if(currentStudentId){
+        // IMPORTANT: safe doc ID
+        const docId =
+        regNo.replaceAll("/", "_");
 
-            await db.collection("students")
-.doc(regNo)
-const docId = regNo.replaceAll("/", "_");
-await db.collection("students").doc(docId).set({
-    regNo: regNo, // original register number stored
-    name: name,
-    position: position,
-    graduationDate: graduationDate,
-    imageUrl: imageUrl,
-    createdAt: new Date()
-});
+        const studentData = {
 
-            showToast("Updated","Student updated");
+            name: name,
+            regNo: regNo,
+            position: position,
+            graduationDate: graduationDate,
+            imageUrl: imageUrl || "",
+            createdAt:
+            firebase.firestore.FieldValue.serverTimestamp()
 
-        }else{
+        };
 
-            await db.collection("students")
-.doc(regNo) // 🔥 SET REGISTER NUMBER AS DOC ID
-.set({
-    name,
-    regNo,
-    position,
-    imageUrl,
-    graduationDate,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-});
-
-            showToast("Added","Student added");
-
-        }
+        // Update or create
+        await db.collection("students")
+        .doc(docId)
+        .set(studentData);
 
         closeModal();
 
+        showToast(
+            "Success",
+            "Student saved successfully"
+        );
+
     }
-    catch(err){
+    catch(error){
 
-        showToast("Error",err.message,"error");
+        console.error(error);
+
+        showToast(
+            "Error",
+            error.message,
+            "error"
+        );
 
     }
-
 }
 
 /* ================= DELETE ================= */
